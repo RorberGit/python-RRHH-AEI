@@ -1,4 +1,4 @@
-//Instalar entorno virtual
+##Instalar entorno virtual
 pip install virtualenv
 
 //Crear entorno virtual
