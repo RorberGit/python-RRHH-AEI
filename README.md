@@ -1,18 +1,21 @@
-##Instalar entorno virtual
+## Requisitoas del proyecto 
+
+```bash
+# Instalar entorno virtual
 pip install virtualenv
 
-//Crear entorno virtual
+# Crear entorno virtual
 python -m virtualenv venv
 
-//Activar el entorno virtual en Visual Stusio Code
+# Activar el entorno virtual en Visual Stusio Code
 1- presionar F1
 2- {Seleccionar} Python: Select Interpreter
 3- Seleccionar el interpreter de preferencia
 
-//Instalar Django
+# Instalar Django
 pip install django
 
-//Instalar RestFramework
+# Instalar RestFramework
 pip install djangorestframework
 
 //Crear el proyecto
