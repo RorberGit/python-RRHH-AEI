@@ -4,6 +4,6 @@ from .api import TrabajadorViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r'api', TrabajadorViewSet, 'trabajador')
+router.register(r'trabajador', TrabajadorViewSet, 'trabajador')
 
 urlpatterns = router.urls
