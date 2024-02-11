@@ -1,21 +1,10 @@
 from django.db import models
-import uuid
+from common.models import CommonFields
 
 # Create your models here.
 
 
-class Common(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name=("created_at"))
-    updated_at = models.DateTimeField(
-        auto_now=True, verbose_name=("updated at"))
-
-    class Meta:
-        abstract = True
-
-
-class Trabajador(Common):
+class Empleados(CommonFields):
     nombre = models.CharField("Nombre", max_length=60)
     papellido = models.CharField("Primer Apellido", max_length=30)
     sapellido = models.CharField("Segundo Apellido", max_length=30)

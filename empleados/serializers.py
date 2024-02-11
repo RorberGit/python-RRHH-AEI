@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import Trabajador
+from .models import Empleados
 
 
-class TrabajadorSerializers(serializers.ModelSerializer):
+class EmpleadosSerializers(serializers.ModelSerializer):
     class Meta:
-        model = Trabajador
+        model = Empleados
         fields = "__all__"
         # read_only_fields = ('create_at', )
