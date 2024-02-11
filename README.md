@@ -18,10 +18,39 @@ pip install django
 # Instalar RestFramework
 pip install djangorestframework
 
-//Crear el proyecto
+# Crear el proyecto
 django-admin startproject {nombe del proyecto}
 
-//Crear aplicacion 
-python manage.py startapp {nombre de la aplicacion}
+# Crear aplicacion 
+django-admin startapp {nombre de la aplicacion}
 
+# Instalar Cross Header
+pip install django-cors-headers
 
+# Instalar soporte para postgres
+pip install psycopg2
+```
+
+## Para correr el proyecto
+
+```bash
+# ejecutar 
+python manage.py runserver
+```
+
+## Los cambios en el modelos se deben de establecer en las migraciones
+## Cada ves que se establesca un cambio en las tablas de el proyecto
+
+```bash
+# Crear la migracion para todo el proyecto
+python manage.py makemigrations 
+
+# Crear la migracion para una APP
+python manage.py makemigrations {nombre app}
+
+# Establecer migracion para todo el proyecto
+python manage.py migrate
+
+# Establecer migracion para una APP
+python manage.py migrate {nombre app}
+```
