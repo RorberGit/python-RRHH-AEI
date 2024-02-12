@@ -13,5 +13,8 @@ class Empleados(CommonFields):
     ci = models.CharField("Número de Identidad", max_length=11)
     note = models.TextField("Nota")
 
+    class meta:
+        ordering = ['created_at']
+
     def __str__(self):
         return "%s %s %s" % (self.nombre, self.papellido, self.sapellido)

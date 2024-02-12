@@ -9,7 +9,6 @@ class ListEmpleados(generics.ListAPIView):
     serializer_class = EmpleadosSerializers
     permission_classes = [permissions.AllowAny]
     filter_backends = [filters.OrderingFilter]
-    ordering = ['created_at']
 
 
 class CreateEmpleados(generics.CreateAPIView):
