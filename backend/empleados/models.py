@@ -49,7 +49,20 @@ class Empleados(CommonFields):
         default=None,
     )
     proyectos = models.ForeignKey(
-        Proyectos, on_delete=models.SET_NULL, blank=True, null=True, default=None
+        Proyectos,
+        on_delete=models.SET_NULL,
+        verbose_name="Proyectos",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    areadpt = models.ForeignKey(
+        "organizacion.AreaDpto",
+        on_delete=models.SET_NULL,
+        verbose_name="Area o departamento",
+        blank=True,
+        null=True,
+        default=None,
     )
     ne = models.ForeignKey(
         Ne,
@@ -170,7 +183,7 @@ class Empleados(CommonFields):
         "Bloque", max_length=150, blank=True, null=True, default=None
     )
     apartamento = models.CharField(
-        "Apartamento", max_length=150, blank=True, null=True, default=None
+        "Apartamento de albergado", max_length=150, blank=True, null=True, default=None
     )
     cuarto = models.CharField(
         "Cuarto", max_length=150, blank=True, null=True, default=None
