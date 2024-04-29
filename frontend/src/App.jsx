@@ -1,10 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Login } from "./views";
+import { Login, Empleados } from "./pages";
 import { Layout } from "./components";
-import { Dashboard } from "./views/dashboard";
+import { Dashboard } from "./pages/dashboard";
 import { Suspense } from "react";
-import Usuarios from "./views/usuarios";
-import Empleados from "./views/empleados";
+import Usuarios from "./pages/usuarios";
 
 function App() {
   return (

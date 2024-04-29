@@ -1,23 +1,36 @@
-from django.db import models
-from common.models import CommonFields
-from simple_history.models import HistoricalRecords
 from datetime import date
 
+from django.db import models
+from simple_history.models import HistoricalRecords
+
+from antiguedad.api.models import Antdd
+from common.models import CommonFields
+from integracion.api.models import Afp, Defensa, Orm
 from localidad.models import Municipio, Provincia
+from nivel_escolar.api.models import Ne
+from organizacion.api.models import Proyectos
+
+from .api import COLOR_PIEL_CHOICE, SEXO_CHOISE
 
 # Create your models here.
 
 
 class Empleados(CommonFields):
-    nip: models.IntegerField(
+    nip = models.IntegerField(
         "Número de Identificación Personal", blank=True, null=True, unique=True
     )
     nombre = models.CharField("Nombre", max_length=150)
     apellido_paterno = models.CharField("Apellido Paterno", max_length=100)
     apellido_materno = models.CharField("Apellido Materno", max_length=100)
-    sexo = models.CharField("Sexo", max_length=1, blank=True, null=True, default=None)
+    sexo = models.CharField(
+        "Sexo", max_length=1, choices=SEXO_CHOISE, null=True, default="M"
+    )
     color_piel = models.CharField(
-        "Color de la piel", max_length=1, blank=True, null=True, default=None
+        "Color de la piel",
+        max_length=1,
+        choices=COLOR_PIEL_CHOICE,
+        null=True,
+        default="B",
     )
     ci = models.CharField(
         "Número de Identidad",
@@ -27,17 +40,27 @@ class Empleados(CommonFields):
         default=None,
         unique=True,
     )
-    antdd = models.CharField(
-        "Antigüedad", max_length=2, null=True, blank=True, default=None
+    antdd = models.ForeignKey(
+        Antdd,
+        verbose_name="Antigüedad",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        default=None,
     )
-    ne = models.CharField(
-        "Nivel Escolar", max_length=30, null=True, blank=True, default=None
+    proyectos = models.ForeignKey(
+        Proyectos, on_delete=models.SET_NULL, blank=True, null=True, default=None
+    )
+    ne = models.ForeignKey(
+        Ne,
+        on_delete=models.SET_NULL,
+        verbose_name="Nivel Escolar",
+        blank=True,
+        null=True,
+        default=None,
     )
     ag = models.CharField(
         "Año de graduado", max_length=4, null=True, blank=True, default=None
-    )
-    especialidad = models.CharField(
-        "Especialidad", max_length=100, null=True, blank=True, default=None
     )
     no = models.CharField("No", max_length=20, null=True, blank=True, default=None)
     calle = models.CharField(
@@ -58,7 +81,7 @@ class Empleados(CommonFields):
     )
     municipio = models.ForeignKey(
         Municipio,
-        on_delete=models.SET_NULL,
+        on_delete=models.DO_NOTHING,
         verbose_name="Municipio",
         null=True,
         blank=True,
@@ -66,7 +89,7 @@ class Empleados(CommonFields):
     )
     provincia = models.ForeignKey(
         Provincia,
-        on_delete=models.SET_NULL,
+        on_delete=models.DO_NOTHING,
         verbose_name="Provincia",
         null=True,
         blank=True,
@@ -75,17 +98,32 @@ class Empleados(CommonFields):
     telefono = models.CharField(
         "Teléfono", max_length=30, null=True, blank=True, default=None
     )
-    afp = models.CharField(
-        "Afiliación política", max_length=250, blank=True, null=True, default=None
+    afp = models.ForeignKey(
+        Afp,
+        on_delete=models.SET_NULL,
+        verbose_name="Afiliación política",
+        blank=True,
+        null=True,
+        default=None,
     )
-    orm = models.CharField(
-        "Organizaciones de masa", max_length=250, blank=True, null=True, default=None
+    orm = models.ForeignKey(
+        Orm,
+        on_delete=models.SET_NULL,
+        verbose_name="Organizaciones de masa",
+        blank=True,
+        null=True,
+        default=None,
     )
     cpt = models.BooleanField(
         "Cobra por tarjeta", default=False, null=True, blank=False
     )
-    defensa = models.CharField(
-        "Defensa", max_length=250, blank=True, null=True, default=None
+    defensa = models.ForeignKey(
+        Defensa,
+        on_delete=models.SET_NULL,
+        verbose_name="Defensa",
+        blank=True,
+        null=True,
+        default=None,
     )
     talla_pantalon = models.IntegerField(
         "Talla pantalón", blank=True, null=True, default=None
@@ -114,15 +152,6 @@ class Empleados(CommonFields):
     )
     fecha_captado = models.DateField(
         "Fecha de captado", null=True, blank=True, default=date.today
-    )
-    proyecto = models.CharField(
-        "Proyecto", max_length=150, blank=True, null=True, default=None
-    )
-    area_dpto = models.CharField(
-        "Área / Departamento", max_length=150, blank=True, null=True, default=None
-    )
-    cargo = models.CharField(
-        "Cargo", max_length=150, blank=True, null=True, default=None
     )
     fecha_cc = models.DateField(
         "Fecha de contrato en el cargo", null=True, blank=True, default=date.today
@@ -156,10 +185,10 @@ class Empleados(CommonFields):
         "Pase (RTD)", max_length=150, blank=True, null=True, default=None
     )
 
-    ##image = models.ImageField("Image Field", null=True, blank=True)
+    # image = models.ImageField("Image Field", null=True, blank=True)
 
-    ##image_file = models.FileField("File Field", null=True, blank=True)
-    ##image_data = models.BinaryField("Binary Field", null=True, blank=True)
+    # image_file = models.FileField("File Field", null=True, blank=True)
+    # image_data = models.BinaryField("Binary Field", null=True, blank=True)
     foto = models.TextField("Foto", null=True, blank=True)
 
     history = HistoricalRecords()
@@ -172,8 +201,8 @@ class Empleados(CommonFields):
     def _history_user(self, value):
         self.changed_by = value
 
-    class meta:
+    class Meta:
         ordering = ["created_at"]
 
     def __str__(self):
-        return "%s %s %s" % (self.nombre, self.apellido_paterno, self.apellido_materno)
+        return f"{self.nombre} {self.apellido_paterno} {self.apellido_materno}"

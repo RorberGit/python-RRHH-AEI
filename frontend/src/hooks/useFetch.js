@@ -4,7 +4,7 @@ import useAxiosToken from "./useAxiosToken";
 export const useFetch = (url = "") => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setloading] = useState(false);
+  const [loading, setloading] = useState(true);
 
   const axiosToken = useAxiosToken();
 

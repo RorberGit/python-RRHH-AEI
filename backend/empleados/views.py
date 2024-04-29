@@ -9,7 +9,8 @@ class ListEmpleados(generics.ListAPIView):
     serializer_class = EmpleadosSerializers
     permission_classes = [permissions.AllowAny]
     filter_backends = [filters.OrderingFilter]
-    
+
+
 class RetrieveEmpleados(generics.RetrieveAPIView):
     queryset = Empleados.objects.all().order_by("created_at")
     serializer_class = EmpleadosSerializers
@@ -39,7 +40,10 @@ class FilterEmpleados(generics.ListAPIView):
     queryset = Empleados.objects.all()
     serializer_class = EmpleadosSerializers
     permission_classes = [permissions.AllowAny]
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['id', 'nombre', 'ci']
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter
+                       ]
+    filterset_fields = ["id", "nombre", "ci"]
+    ## para poner en el filtrado todos los campos del serializaers    
+    """ filterset_fields = serializer_class.Meta.fields """
     # ordering_fields = ['edad']
-    ordering = ['created_at']
+    ordering = ["created_at"]

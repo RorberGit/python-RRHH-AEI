@@ -27,6 +27,9 @@ class LoginUser(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
+        """
+        Funcion que permite guardar los registros del usuario
+        """
         # data = request.data
         username = request.data.get("username")
         password = request.data.get("password")

@@ -46,12 +46,13 @@ INSTALLED_APPS = [
     "simple_history",
     "common",
     "empleados",
+    "organizacion",
+    "integracion",
     "localidad",
-    "proyectos",
-    "area_dpto",
-    "cargos",
-    "especialidades",
     "auth_user",
+    "antiguedad",
+    "nivel_escolar",
+    "vestimenta",
 ]
 
 AUTH_USER_MODEL = "auth_user.Usuario"
@@ -165,6 +166,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://lolcalhost:8000",
     "http://127.0.0.1:8000",
     "http://localhost:5173",
+    "http://localhost:3000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

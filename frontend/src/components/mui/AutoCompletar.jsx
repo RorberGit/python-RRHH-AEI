@@ -6,9 +6,8 @@ export default function AutoCompletar(props) {
     options,
     label,
     value,
-    setFieldValue,
-    field,
     handleBlur,
+    onChange,
     touched,
     errors,
     ncol,
@@ -27,7 +26,7 @@ export default function AutoCompletar(props) {
         }
         value={value}
         defaultValue={value}
-        onChange={(event, value) => setFieldValue(`${field}`, value)}
+        onChange={onChange}
         size="small"
         sx={ncol ? { gridColumn: `span ${ncol}` } : {}}
         renderInput={(params) => (
@@ -48,10 +47,9 @@ AutoCompletar.propTypes = {
   options: PropTypes.array,
   name: PropTypes.string,
   label: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  setFieldValue: PropTypes.func,
-  field: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),  
   handleBlur: PropTypes.func,
+  onChange: PropTypes.func,
   touched: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool,
