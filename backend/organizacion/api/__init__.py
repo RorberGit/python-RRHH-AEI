@@ -1,3 +1,3 @@
-from .models import Proyectos
+from .models import Proyectos, AreaDpto, Cargos, Especialidades
 
-__all__ = ["Proyectos"]
+__all__ = ["Proyectos", "AreaDpto", "Cargos", "Especialidades"]
