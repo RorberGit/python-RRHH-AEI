@@ -3,7 +3,7 @@ from datetime import date
 from django.db import models
 from simple_history.models import HistoricalRecords
 
-from antiguedad.api.models import Antdd
+##from antiguedad.api.models import Antdd
 from common.models import CommonFields
 from integracion.api.models import Afp, Defensa, Orm
 from localidad.models import Municipio, Provincia
@@ -16,6 +16,7 @@ from .api import COLOR_PIEL_CHOICE, SEXO_CHOISE
 
 
 class Empleados(CommonFields):
+    
     nip = models.IntegerField(
         "Número de Identificación Personal", blank=True, null=True, unique=True
     )
