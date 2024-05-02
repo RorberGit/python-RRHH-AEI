@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Afp',
+            name='AjtVjt',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created_at')),
@@ -21,13 +21,13 @@ class Migration(migrations.Migration):
                 ('nombre', models.CharField(max_length=150, unique=True, verbose_name='Nombre')),
             ],
             options={
-                'verbose_name': 'Afiliación política',
-                'verbose_name_plural': 'Afiliacións políticas',
+                'verbose_name': 'Base de alojamiento / Viajante',
+                'verbose_name_plural': 'Base de alojamiento / Viajante',
                 'ordering': ['nombre'],
             },
         ),
         migrations.CreateModel(
-            name='Defensa',
+            name='Antdd',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created_at')),
@@ -35,13 +35,13 @@ class Migration(migrations.Migration):
                 ('nombre', models.CharField(max_length=150, unique=True, verbose_name='Nombre')),
             ],
             options={
-                'verbose_name': 'Ubicación en la defensa',
-                'verbose_name_plural': 'Ubicaciones en la defensa',
+                'verbose_name': 'Antigüedad',
+                'verbose_name_plural': 'Antigüedad',
                 'ordering': ['nombre'],
             },
         ),
         migrations.CreateModel(
-            name='Orm',
+            name='Ne',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created_at')),
@@ -49,8 +49,22 @@ class Migration(migrations.Migration):
                 ('nombre', models.CharField(max_length=150, unique=True, verbose_name='Nombre')),
             ],
             options={
-                'verbose_name': 'Organización de masa',
-                'verbose_name_plural': 'Organizaciones de masas',
+                'verbose_name': 'Nivel escolar',
+                'verbose_name_plural': 'Niveles escolares',
+                'ordering': ['nombre'],
+            },
+        ),
+        migrations.CreateModel(
+            name='Procedencias',
+            fields=[
+                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created_at')),
+                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
+                ('nombre', models.CharField(max_length=150, unique=True, verbose_name='Nombre')),
+            ],
+            options={
+                'verbose_name': 'Procedencia',
+                'verbose_name_plural': 'Procedencias',
                 'ordering': ['nombre'],
             },
         ),
