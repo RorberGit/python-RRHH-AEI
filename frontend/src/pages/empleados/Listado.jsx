@@ -1,11 +1,23 @@
-import { Avatar, Container, Paper, Box, Stack } from "@mui/material";
+import {
+  Avatar,
+  Container,
+  Paper,
+  Box,
+  Stack,
+  TextField,
+  Button,
+} from "@mui/material";
 import { useBase64 } from "../../hooks/useBase64";
 import { useEffect, useState } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import { RUTAS_API } from "../../constants";
 import { usePost } from "../../hooks/usePost";
+import { useForm } from "react-hook-form";
+import AutoCompletar from './../../components/muih/AutoCompletar';
 
 export default function Listado() {
+  const { register, handleSubmit } = useForm();
+
   const [image, setImage] = useState();
   const create = usePost();
   const getBase64 = useBase64();
@@ -22,6 +34,8 @@ export default function Listado() {
       });
     }
   }, [data, loading]);
+
+  const onSubmit = (data) => console.info(data);
 
   const newRow = (base64) => {
     create(RUTAS_API.EMPLOYEE.CREATE, {
@@ -57,17 +71,33 @@ export default function Listado() {
     <>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Stack spacing={2} direction="row">
-          <Paper sx={{ p: 2, maxWidth:200}}>
+          <Paper sx={{ p: 2, maxWidth: 200 }}>
             <Stack spacing={2}>
               <Box component="img" src={image}></Box>
               <input type="file" onChange={handleFile} />
             </Stack>
           </Paper>
-          <Paper>444444444</Paper>
         </Stack>
         <Paper sx={{ p: 2, display: "block", flexDirection: "column" }}>
           <Avatar src={image} variant="square" />
         </Paper>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Paper sx={{ p: 2, maxWidth: 200 }}>
+            <Box>
+              <TextField
+                {...register("Nombre")}
+                variant="outlined"
+                size="small"
+                label="Nombre"
+                placeholder="Nombre"
+              />
+              <AutoCompletar/>
+            </Box>
+            <Button type="submit" variant="contained">
+              Aceptar
+            </Button>
+          </Paper>
+        </form>
       </Container>
     </>
   );

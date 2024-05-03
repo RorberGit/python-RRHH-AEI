@@ -3,12 +3,13 @@ from datetime import date
 from django.db import models
 from simple_history.models import HistoricalRecords
 
-from antiguedad.api.models import Antdd
 from common.models import CommonFields
+from empleados.api.fields_chocices import ESTADO_VIENDA_CHOICE, STATE_CHOICE
 from integracion.api.models import Afp, Defensa, Orm
 from localidad.models import Municipio, Provincia
-from nivel_escolar.api.models import Ne
 from organizacion.api.models import Proyectos
+from otros.api.models import Pase, Procedencias, Antdd, Ne, AjtVjt, Turno
+from vestimenta.api.models import Calzado, Camisa, Pantalon
 
 from .api import COLOR_PIEL_CHOICE, SEXO_CHOISE
 
@@ -16,6 +17,7 @@ from .api import COLOR_PIEL_CHOICE, SEXO_CHOISE
 
 
 class Empleados(CommonFields):
+
     nip = models.IntegerField(
         "Número de Identificación Personal", blank=True, null=True, unique=True
     )
@@ -138,21 +140,41 @@ class Empleados(CommonFields):
         null=True,
         default=None,
     )
-    talla_pantalon = models.IntegerField(
-        "Talla pantalón", blank=True, null=True, default=None
+    pantalon = models.ForeignKey(
+        Pantalon,
+        on_delete=models.SET_NULL,
+        verbose_name="Talla pantalón",
+        blank=True,
+        null=True,
+        default=None,
     )
-    talla_camisa = models.IntegerField(
-        "Talla Camisa / Blusa", blank=True, null=True, default=None
+    camisa = models.ForeignKey(
+        Camisa,
+        on_delete=models.SET_NULL,
+        verbose_name="Talla Camisa / Blusa",
+        blank=True,
+        null=True,
+        default=None,
     )
-    talla_calzado = models.IntegerField(
-        "Talla Calzado", blank=True, null=True, default=None
+    calzado = models.ForeignKey(
+        Calzado,
+        on_delete=models.SET_NULL,
+        verbose_name="Talla Calzado",
+        blank=True,
+        null=True,
+        default=None,
     )
     ruta = models.CharField("Ruta", max_length=150, blank=True, null=True, default=None)
     pg = models.CharField(
         "Parada omnibus", max_length=150, blank=True, null=True, default=None
     )
     estado_vivienda = models.CharField(
-        "Estado de la vivienda", max_length=150, blank=True, null=True, default=None
+        "Estado de la vivienda",
+        max_length=1,
+        choices=ESTADO_VIENDA_CHOICE,
+        blank=True,
+        null=True,
+        default="B",
     )
     propietario = models.BooleanField(
         "Propietario", default=False, null=True, blank=True
@@ -160,8 +182,13 @@ class Empleados(CommonFields):
     vivienda_vinculada = models.BooleanField(
         "Vivienda vinculada", default=False, null=True, blank=False
     )
-    procedencia = models.CharField(
-        "Procedencia", max_length=150, blank=True, null=True, default=None
+    procedencia = models.ForeignKey(
+        Procedencias,
+        on_delete=models.SET_NULL,
+        verbose_name="Procedencia",
+        blank=True,
+        null=True,
+        default=None,
     )
     fecha_captado = models.DateField(
         "Fecha de captado", null=True, blank=True, default=date.today
@@ -172,9 +199,10 @@ class Empleados(CommonFields):
     nuevo_ingreso = models.BooleanField(
         "Nuevo ingreso", blank=True, null=True, default=True
     )
-    alojamiento_viajante = models.CharField(
-        "Base de alojamiento / Viajante",
-        max_length=150,
+    ajtvjt = models.ForeignKey(
+        AjtVjt,
+        on_delete=models.SET_NULL,
+        verbose_name="Base de alojamiento / Viajante",
         blank=True,
         null=True,
         default=None,
@@ -182,7 +210,7 @@ class Empleados(CommonFields):
     bloque = models.CharField(
         "Bloque", max_length=150, blank=True, null=True, default=None
     )
-    apartamento = models.CharField(
+    aptoabg = models.CharField(
         "Apartamento de albergado", max_length=150, blank=True, null=True, default=None
     )
     cuarto = models.CharField(
@@ -191,18 +219,32 @@ class Empleados(CommonFields):
     pantry = models.CharField(
         "Pantry", max_length=150, blank=True, null=True, default=None
     )
-    turno = models.CharField(
-        "Turno", max_length=150, blank=True, null=True, default=None
+    turno = models.ForeignKey(
+        Turno,
+        on_delete=models.SET_NULL,
+        verbose_name="Turno",
+        blank=True,
+        null=True,
+        default=None,
     )
-    pase = models.CharField(
-        "Pase (RTD)", max_length=150, blank=True, null=True, default=None
+    pase = models.ForeignKey(
+        Pase,
+        on_delete=models.SET_NULL,
+        verbose_name="Pase (RTD)",
+        blank=True,
+        null=True,
+        default=None,
     )
-
-    # image = models.ImageField("Image Field", null=True, blank=True)
-
-    # image_file = models.FileField("File Field", null=True, blank=True)
-    # image_data = models.BinaryField("Binary Field", null=True, blank=True)
     foto = models.TextField("Foto", null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    state = models.CharField(
+        verbose_name="Entrada/Salida",
+        max_length=10,
+        choices=STATE_CHOICE,
+        blank=True,
+        null=True,
+        default="Salida",
+    )
 
     history = HistoricalRecords()
 

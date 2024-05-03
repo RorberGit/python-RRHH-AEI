@@ -1,4 +1,4 @@
-import { Container, Paper, Box, Stack, Tab } from "@mui/material";
+import { Container, Paper, Box, Stack, Tab, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Formik } from "formik";
@@ -48,6 +48,7 @@ export default function Formulario() {
         <h1>Cargando...</h1>
       </>
     );
+  const handleForm = (value) => console.info(value);
 
   return (
     <>
@@ -60,7 +61,7 @@ export default function Formulario() {
             </Stack>
           </Paper>
           <Paper sx={{ p: 2 }}>
-            <Formik initialValues={initialValues}>
+            <Formik onSubmit={handleForm} initialValues={initialValues}>
               {({
                 values,
                 touched,
@@ -652,6 +653,11 @@ export default function Formulario() {
                       </Box>
                     </TabPanel>
                   </TabContext>
+                  <Box textAlign="right">
+                    <Button type="submit" variant="contained">
+                      Guardar
+                    </Button>
+                  </Box>
                 </form>
               )}
             </Formik>

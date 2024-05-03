@@ -17,19 +17,6 @@
 
 
 -- ----------------------------
--- Table structure for localidad_municipio
--- ----------------------------
-DROP TABLE IF EXISTS "public"."localidad_municipio";
-CREATE TABLE "public"."localidad_municipio" (
-  "id" uuid NOT NULL,
-  "created_at" timestamptz(6) NOT NULL,
-  "updated_at" timestamptz(6) NOT NULL,
-  "nombre" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
-  "provincia_id" uuid NOT NULL
-)
-;
-
--- ----------------------------
 -- Records of localidad_municipio
 -- ----------------------------
 INSERT INTO "public"."localidad_municipio" VALUES ('c5a385c2-51a1-4b61-bd24-94d90fe73efb', '2024-04-14 16:51:44.076071-04', '2024-04-14 16:51:44.076071-04', 'Antilla', '658c4849-18c3-45e1-b4fb-9fae4143a730');
@@ -200,20 +187,3 @@ INSERT INTO "public"."localidad_municipio" VALUES ('4a5bd936-1a52-4947-83ca-100e
 INSERT INTO "public"."localidad_municipio" VALUES ('071ef706-27e7-416f-8cf1-c9930c3d93c5', '2024-04-14 17:50:30.054821-04', '2024-04-14 17:50:30.054821-04', 'San Luis', '006851ba-d7d0-464c-9011-1a53f3dc5e5c');
 INSERT INTO "public"."localidad_municipio" VALUES ('a6e5ba55-c4d8-4e89-b87e-e486a00b95f7', '2024-04-14 17:50:37.633696-04', '2024-04-14 17:50:37.633696-04', 'Sandino', '006851ba-d7d0-464c-9011-1a53f3dc5e5c');
 INSERT INTO "public"."localidad_municipio" VALUES ('0d2eefee-5180-4723-ab09-4f033f34daf2', '2024-04-14 17:50:44.442759-04', '2024-04-14 17:50:44.442759-04', 'Viñales', '006851ba-d7d0-464c-9011-1a53f3dc5e5c');
-
--- ----------------------------
--- Indexes structure for table localidad_municipio
--- ----------------------------
-CREATE INDEX "localidad_municipio_provincia_id_ccb2aa0e" ON "public"."localidad_municipio" USING btree (
-  "provincia_id" "pg_catalog"."uuid_ops" ASC NULLS LAST
-);
-
--- ----------------------------
--- Primary Key structure for table localidad_municipio
--- ----------------------------
-ALTER TABLE "public"."localidad_municipio" ADD CONSTRAINT "localidad_municipio_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Foreign Keys structure for table localidad_municipio
--- ----------------------------
-ALTER TABLE "public"."localidad_municipio" ADD CONSTRAINT "localidad_municipio_provincia_id_ccb2aa0e_fk_localidad" FOREIGN KEY ("provincia_id") REFERENCES "public"."localidad_provincia" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION DEFERRABLE INITIALLY DEFERRED;
