@@ -15,19 +15,6 @@
  Date: 14/04/2024 17:55:41
 */
 
-
--- ----------------------------
--- Table structure for localidad_provincia
--- ----------------------------
-DROP TABLE IF EXISTS "public"."localidad_provincia";
-CREATE TABLE "public"."localidad_provincia" (
-  "id" uuid NOT NULL,
-  "created_at" timestamptz(6) NOT NULL,
-  "updated_at" timestamptz(6) NOT NULL,
-  "nombre" varchar(200) COLLATE "pg_catalog"."default" NOT NULL
-)
-;
-
 -- ----------------------------
 -- Records of localidad_provincia
 -- ----------------------------
@@ -47,20 +34,3 @@ INSERT INTO "public"."localidad_provincia" VALUES ('137fe996-14b3-49ca-8529-1c59
 INSERT INTO "public"."localidad_provincia" VALUES ('a3fb07f5-5f6d-4813-97fd-b7d64e3632bc', '2024-04-14 16:50:15.262809-04', '2024-04-14 16:50:15.262809-04', 'Santiago de Cuba');
 INSERT INTO "public"."localidad_provincia" VALUES ('327eb2c4-8c46-4fce-8bdd-0d4a3df2ef80', '2024-04-14 16:50:23.654761-04', '2024-04-14 16:50:23.654761-04', 'Guantánamo');
 INSERT INTO "public"."localidad_provincia" VALUES ('f8d5f557-c6fc-4967-932f-7209be91ac8d', '2024-04-14 16:50:52.951888-04', '2024-04-14 16:50:52.951888-04', 'Isla de la Juventud');
-
--- ----------------------------
--- Indexes structure for table localidad_provincia
--- ----------------------------
-CREATE INDEX "localidad_provincia_nombre_1c4301f5_like" ON "public"."localidad_provincia" USING btree (
-  "nombre" COLLATE "pg_catalog"."default" "pg_catalog"."varchar_pattern_ops" ASC NULLS LAST
-);
-
--- ----------------------------
--- Uniques structure for table localidad_provincia
--- ----------------------------
-ALTER TABLE "public"."localidad_provincia" ADD CONSTRAINT "localidad_provincia_nombre_key" UNIQUE ("nombre");
-
--- ----------------------------
--- Primary Key structure for table localidad_provincia
--- ----------------------------
-ALTER TABLE "public"."localidad_provincia" ADD CONSTRAINT "localidad_provincia_pkey" PRIMARY KEY ("id");

@@ -1,14 +1,19 @@
 import { Box } from "@mui/material";
-import { DatePicker, LocalizationProvider, esES } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { esES } from "@mui/x-date-pickers/locales";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/es";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PropTypes from "prop-types";
+import { useController } from "react-hook-form";
 
-export default function Fecha(props) {
-  const { label, value, setFieldValue, field, touched, errors, ncol } = props;
+export default function Fecha({ name, control, label, span }) {
+  const { field, formState } = useController({ name, control });
+
+  const { errors } = formState;
 
   return (
-    <Box sx={{ gridColumn: `span ${ncol}`, marginTop: "-8px" }}>
+    <Box sx={{ gridColumn: `span ${span}`, marginTop: "-8px" }}>
       {/*Campo Fecha*/}
       <LocalizationProvider
         dateAdapter={AdapterDayjs}
@@ -19,14 +24,15 @@ export default function Fecha(props) {
       >
         <DemoContainer components={["DatePicker"]}>
           <DatePicker
+            {...field}
             label={label}
-            value={value}
+            value={field.value}
             views={["year", "month", "day"]}
-            onChange={(newValue) => setFieldValue(`${field}`, newValue)}
+            onChange={(e) => field.onChange(e)}
             slotProps={{
               textField: {
                 size: "small",
-                helperText: touched && errors,
+                helperText: errors[name] ? errors[name].message : "",
               },
             }}
           />
@@ -37,11 +43,13 @@ export default function Fecha(props) {
 }
 
 Fecha.propTypes = {
+  name: PropTypes.string,
+  control: PropTypes.object,
   label: PropTypes.string,
   value: PropTypes.object,
   setFieldValue: PropTypes.func,
   field: PropTypes.string,
   touched: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   errors: PropTypes.string,
-  ncol: PropTypes.string,
+  span: PropTypes.string,
 };

@@ -4,11 +4,18 @@ import { useEffect, useState } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import { RUTAS_API } from "../../constants";
 import { usePost } from "../../hooks/usePost";
+import { MuiFileInput } from "mui-file-input";
 
 export default function Listado() {
   const [image, setImage] = useState();
   const create = usePost();
   const getBase64 = useBase64();
+
+  const [file, setFile] = useState(null);
+
+  const handleChange = (newFile) => {
+    setFile(newFile);
+  };
 
   const { data, loading } = useFetch(
     RUTAS_API.EMPLOYEE.RETRIEVE + "91f44137-7ffd-4527-8194-a87df6f9101c/"
@@ -57,7 +64,7 @@ export default function Listado() {
     <>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Stack spacing={2} direction="row">
-          <Paper sx={{ p: 2, maxWidth:200}}>
+          <Paper sx={{ p: 2, maxWidth: 200 }}>
             <Stack spacing={2}>
               <Box component="img" src={image}></Box>
               <input type="file" onChange={handleFile} />
@@ -67,6 +74,7 @@ export default function Listado() {
         </Stack>
         <Paper sx={{ p: 2, display: "block", flexDirection: "column" }}>
           <Avatar src={image} variant="square" />
+          <MuiFileInput value={file} onChange={handleChange} />
         </Paper>
       </Container>
     </>

@@ -12,4 +12,17 @@ export const RUTAS_API = {
     CREATE: "employee/create/",
     RETRIEVE: "employee/retrieve/",
   },
+  OTHER: {
+    ANTIGUEDAD: "other/antique/",
+    NIVEL_ESCOLAR: "other/school/",
+    PROCEDENCIA: "other/procedence/",
+    TURNO: "/other/turn/",
+    PASE: "/other/pass/",
+  },
+  organization: {
+    PROYECTO: "organization/projects/",
+    AREA: "organization/areadpto/",
+    CARGO: "organization/positions/",
+    ESPECIALIDAD: "organization/specialties/",
+  },
 };

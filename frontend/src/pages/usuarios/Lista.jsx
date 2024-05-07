@@ -34,6 +34,7 @@ export default function Lista() {
   const columns = useMemo(
     () => [
       {
+        type: "number",
         field: "id",
         headerName: "id",
         width: 100,
@@ -41,6 +42,7 @@ export default function Lista() {
         headerAlign: "center",
       },
       {
+        type: "string",
         field: "username",
         headerName: "Usuario",
         width: 100,
@@ -53,8 +55,32 @@ export default function Lista() {
         width: 200,
         align: "left",
         headerAlign: "left",
-        valueGetter: (value) => {
-          return `${value.row.empleados.nombre} ${value.row.empleados.apellido_paterno} ${value.row.empleados.apellido_materno}`;
+        valueGetter: (_, row) => {
+          if (!row || !row.empleados) {
+            return "";
+          }
+          const { nombre, apellido_paterno, apellido_materno } = row.empleados;
+          return `${nombre} ${apellido_paterno} ${apellido_materno}`;
+        },
+      },
+      {
+        type: "date",
+        field: "date_joined",
+        headerName: "Creado",
+        width: 100,
+        valueGetter: (_, row) => {
+          if (!row) return;
+          return new Date(row.date_joined);
+        },
+      },
+      {
+        type: "dateTime",
+        field: "last_login",
+        headerName: "Último inicio de sesión",
+        width: 200,
+        valueGetter: (_, row) => {
+          if (!row) return;
+          return new Date(row.last_login);
         },
       },
       {
@@ -77,29 +103,31 @@ export default function Lista() {
         ],
       },
     ],
-    [deleteUser, editUser]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data]
   );
+
+  if (loading)
+    return (
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
 
   return (
     <>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Paper sx={{ p: 2, display: "block", flexDirection: "column" }}>
-          {loading ? (
-            <>
-              <Stack spacing={2}>
-                <Typography variant="h5">Lista de usuarios</Typography>
-                {error && <Alert severity="error">{error}</Alert>}
-                <Tabla rows={data} columns={columns} />
-              </Stack>
-            </>
-          ) : (
-            <Backdrop
-              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={!loading}
-            >
-              <CircularProgress color="inherit" />
-            </Backdrop>
-          )}
+          <>
+            <Stack spacing={2}>
+              <Typography variant="h5">Lista de usuarios</Typography>
+              {error && <Alert severity="error">{error}</Alert>}
+              <Tabla rows={data} columns={columns} />
+            </Stack>
+          </>
         </Paper>
       </Container>
     </>

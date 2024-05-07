@@ -7,7 +7,7 @@ from common.models import CommonFields
 from empleados.api.fields_chocices import ESTADO_VIENDA_CHOICE
 from integracion.api.models import Afp, Defensa, Orm
 from localidad.models import Municipio, Provincia
-from organizacion.api.models import Proyectos
+from organizacion.api.models import Cargos, Especialidades, Proyectos
 from otros.api.models import Pase, Procedencias, Antdd, Ne, AjtVjt, Turno
 from vestimenta.api.models import Calzado, Camisa, Pantalon
 
@@ -50,10 +50,10 @@ class Empleados(CommonFields):
         null=True,
         default=None,
     )
-    proyectos = models.ForeignKey(
+    proyecto = models.ForeignKey(
         Proyectos,
         on_delete=models.SET_NULL,
-        verbose_name="Proyectos",
+        verbose_name="Proyecto",
         blank=True,
         null=True,
         default=None,
@@ -62,6 +62,22 @@ class Empleados(CommonFields):
         "organizacion.AreaDpto",
         on_delete=models.SET_NULL,
         verbose_name="Area o departamento",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    cargo = models.ForeignKey(
+        Cargos,
+        on_delete=models.SET_NULL,
+        verbose_name="Cargo",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    especialidad = models.ForeignKey(
+        Especialidades,
+        on_delete=models.SET_NULL,
+        verbose_name="Especialidad",
         blank=True,
         null=True,
         default=None,

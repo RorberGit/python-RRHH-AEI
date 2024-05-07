@@ -1,5 +1,7 @@
 import { ThemeProvider, createTheme } from "@mui/material";
-import { DataGrid, GridToolbar, esES } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { esES } from "@mui/x-data-grid/locales";
+
 import PropTypes from "prop-types";
 
 const theme = createTheme(

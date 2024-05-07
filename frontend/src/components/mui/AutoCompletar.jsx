@@ -1,61 +1,51 @@
 import { Autocomplete, TextField } from "@mui/material";
+import { useController } from "react-hook-form";
 import PropTypes from "prop-types";
 
-export default function AutoCompletar(props) {
-  const {
-    options,
-    label,
-    value,
-    handleBlur,
-    onChange,
-    touched,
-    errors,
-    ncol,
-    multiple,
-  } = props;
+export default function Autocompletar({
+  name,
+  control,
+  label,
+  options,
+  onChange,
+  span,
+  multiple,
+}) {
+  const { field, formState } = useController({ name, control });
+
+  const { errors } = formState;
 
   return (
-    <>
-      <Autocomplete
-        multiple={multiple || false}
-        disablePortal
-        options={options}
-        getOptionLabel={(option) => option.nombre}
-        isOptionEqualToValue={(option, value) =>
-          value === undefined || value === "" || option.id === value.id
-        }
-        value={value}
-        defaultValue={value}
-        onChange={onChange}
-        size="small"
-        sx={ncol ? { gridColumn: `span ${ncol}` } : {}}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label={label}
-            onBlur={handleBlur}
-            error={!!touched && !!errors}
-            helperText={touched && errors}
-          />
-        )}
-      />
-    </>
+    <Autocomplete
+      {...field}
+      multiple={!!multiple}
+      disablePortal
+      options={options}
+      onChange={onChange ? onChange : (_, value) => field.onChange(value)}
+      getOptionLabel={(option) => option.nombre}
+      isOptionEqualToValue={(option, value) =>
+        value === undefined || value === "" || option.id === value.id
+      }
+      size="small"
+      sx={span ? { gridColumn: `span ${span}` } : null}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          error={!!errors[name]}
+          helperText={errors[name] ? errors[name].message : ""}
+        />
+      )}
+    />
   );
 }
 
-AutoCompletar.propTypes = {
-  options: PropTypes.array,
-  name: PropTypes.string,
+Autocompletar.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),  
-  handleBlur: PropTypes.func,
+  control: PropTypes.object,
+  name: PropTypes.string,
+  options: PropTypes.array,  
   onChange: PropTypes.func,
-  touched: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.bool,
-    PropTypes.array,
-  ]),
-  errors: PropTypes.string,
-  ncol: PropTypes.string,
+  span: PropTypes.string,
   multiple: PropTypes.bool,
 };
