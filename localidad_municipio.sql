@@ -15,6 +15,10 @@
  Date: 14/04/2024 17:55:33
 */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ab4d1f67a4a32e7416ef785b94b9a4e03c4b5785
 -- ----------------------------
 -- Records of localidad_municipio
 -- ----------------------------
@@ -185,4 +189,8 @@ INSERT INTO "public"."localidad_municipio" VALUES ('2b3da061-6180-4347-ae9e-d33e
 INSERT INTO "public"."localidad_municipio" VALUES ('4a5bd936-1a52-4947-83ca-100e89637e20', '2024-04-14 17:50:22.714379-04', '2024-04-14 17:50:22.714379-04', 'San Juan y Martínez', '006851ba-d7d0-464c-9011-1a53f3dc5e5c');
 INSERT INTO "public"."localidad_municipio" VALUES ('071ef706-27e7-416f-8cf1-c9930c3d93c5', '2024-04-14 17:50:30.054821-04', '2024-04-14 17:50:30.054821-04', 'San Luis', '006851ba-d7d0-464c-9011-1a53f3dc5e5c');
 INSERT INTO "public"."localidad_municipio" VALUES ('a6e5ba55-c4d8-4e89-b87e-e486a00b95f7', '2024-04-14 17:50:37.633696-04', '2024-04-14 17:50:37.633696-04', 'Sandino', '006851ba-d7d0-464c-9011-1a53f3dc5e5c');
+<<<<<<< HEAD
 INSERT INTO "public"."localidad_municipio" VALUES ('0d2eefee-5180-4723-ab09-4f033f34daf2', '2024-04-14 17:50:44.442759-04', '2024-04-14 17:50:44.442759-04', 'Viñales', '006851ba-d7d0-464c-9011-1a53f3dc5e5c');
+=======
+INSERT INTO "public"."localidad_municipio" VALUES ('0d2eefee-5180-4723-ab09-4f033f34daf2', '2024-04-14 17:50:44.442759-04', '2024-04-14 17:50:44.442759-04', 'Viñales', '006851ba-d7d0-464c-9011-1a53f3dc5e5c');
+>>>>>>> ab4d1f67a4a32e7416ef785b94b9a4e03c4b5785
