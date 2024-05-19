@@ -5,7 +5,6 @@ from simple_history.models import HistoricalRecords
 
 from common.models import CommonFields
 from empleados.api.fields_chocices import ESTADO_VIENDA_CHOICE
-from integracion.api.models import Afp, Defensa, Orm
 from localidad.models import Municipio, Provincia
 from organizacion.api.models import Cargos, Especialidades, Proyectos
 from otros.api.models import Pase, Procedencias, Antdd, Ne, AjtVjt, Turno
@@ -17,13 +16,20 @@ from .api import COLOR_PIEL_CHOICE, SEXO_CHOISE
 
 
 class Empleados(CommonFields):
-
     nip = models.IntegerField(
         "Número de Identificación Personal", blank=True, null=True, unique=True
     )
     nombre = models.CharField("Nombre", max_length=150)
     apellido_paterno = models.CharField("Apellido Paterno", max_length=100)
     apellido_materno = models.CharField("Apellido Materno", max_length=100)
+    ci = models.CharField(
+        "Número de Identidad",
+        max_length=11,
+        blank=True,
+        null=True,
+        default=None,
+        unique=True,
+    )
     sexo = models.CharField(
         "Sexo", max_length=1, choices=SEXO_CHOISE, null=True, default="M"
     )
@@ -34,42 +40,13 @@ class Empleados(CommonFields):
         null=True,
         default="B",
     )
-    ci = models.CharField(
-        "Número de Identidad",
-        max_length=11,
-        blank=True,
-        null=True,
-        default=None,
-        unique=True,
+    telefono = models.CharField(
+        "Teléfono", max_length=30, null=True, blank=True, default=None
     )
-    antdd = models.ForeignKey(
-        Antdd,
-        verbose_name="Antigüedad",
+    ne = models.ForeignKey(
+        Ne,
         on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        default=None,
-    )
-    proyecto = models.ForeignKey(
-        Proyectos,
-        on_delete=models.SET_NULL,
-        verbose_name="Proyecto",
-        blank=True,
-        null=True,
-        default=None,
-    )
-    areadpt = models.ForeignKey(
-        "organizacion.AreaDpto",
-        on_delete=models.SET_NULL,
-        verbose_name="Area o departamento",
-        blank=True,
-        null=True,
-        default=None,
-    )
-    cargo = models.ForeignKey(
-        Cargos,
-        on_delete=models.SET_NULL,
-        verbose_name="Cargo",
+        verbose_name="Nivel Escolar",
         blank=True,
         null=True,
         default=None,
@@ -82,16 +59,16 @@ class Empleados(CommonFields):
         null=True,
         default=None,
     )
-    ne = models.ForeignKey(
-        Ne,
+    ag = models.CharField(
+        "Año de graduado", max_length=4, null=True, blank=True, default=None
+    )
+    procedencia = models.ForeignKey(
+        Procedencias,
         on_delete=models.SET_NULL,
-        verbose_name="Nivel Escolar",
+        verbose_name="Procedencia",
         blank=True,
         null=True,
         default=None,
-    )
-    ag = models.CharField(
-        "Año de graduado", max_length=4, null=True, blank=True, default=None
     )
     no = models.CharField("No", max_length=20, null=True, blank=True, default=None)
     calle = models.CharField(
@@ -126,21 +103,40 @@ class Empleados(CommonFields):
         blank=True,
         default=None,
     )
-    telefono = models.CharField(
-        "Teléfono", max_length=30, null=True, blank=True, default=None
+    nuevo_ingreso = models.BooleanField(
+        "Nuevo ingreso", blank=True, null=True, default=True
     )
-    afp = models.ForeignKey(
-        Afp,
+    proyecto = models.ForeignKey(
+        Proyectos,
         on_delete=models.SET_NULL,
-        verbose_name="Afiliación política",
+        verbose_name="Proyecto",
         blank=True,
         null=True,
         default=None,
     )
-    orm = models.ForeignKey(
-        Orm,
+    areadpt = models.ForeignKey(
+        "organizacion.AreaDpto",
         on_delete=models.SET_NULL,
-        verbose_name="Organizaciones de masa",
+        verbose_name="Area o departamento",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    cargo = models.ForeignKey(
+        Cargos,
+        on_delete=models.SET_NULL,
+        verbose_name="Cargo",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    fecha_cc = models.DateField(
+        "Fecha de contrato en el cargo", null=True, blank=True, default=date.today
+    )
+    antdd = models.ForeignKey(
+        Antdd,
+        verbose_name="Antigüedad",
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
         default=None,
@@ -148,9 +144,38 @@ class Empleados(CommonFields):
     cpt = models.BooleanField(
         "Cobra por tarjeta", default=False, null=True, blank=False
     )
-    defensa = models.ForeignKey(
-        Defensa,
+    turno = models.ForeignKey(
+        Turno,
         on_delete=models.SET_NULL,
+        verbose_name="Turno",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    pase = models.ForeignKey(
+        Pase,
+        on_delete=models.SET_NULL,
+        verbose_name="Pase (RTD)",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    fecha_captado = models.DateField(
+        "Fecha de captado", null=True, blank=True, default=date.today
+    )
+    afp = models.JSONField(
+        verbose_name="Afiliación política",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    orm = models.JSONField(
+        verbose_name="Organizaciones de masa",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    defensa = models.JSONField(
         verbose_name="Defensa",
         blank=True,
         null=True,
@@ -180,10 +205,6 @@ class Empleados(CommonFields):
         null=True,
         default=None,
     )
-    ruta = models.CharField("Ruta", max_length=150, blank=True, null=True, default=None)
-    pg = models.CharField(
-        "Parada omnibus", max_length=150, blank=True, null=True, default=None
-    )
     estado_vivienda = models.CharField(
         "Estado de la vivienda",
         max_length=1,
@@ -198,23 +219,6 @@ class Empleados(CommonFields):
     vivienda_vinculada = models.BooleanField(
         "Vivienda vinculada", default=False, null=True, blank=False
     )
-    procedencia = models.ForeignKey(
-        Procedencias,
-        on_delete=models.SET_NULL,
-        verbose_name="Procedencia",
-        blank=True,
-        null=True,
-        default=None,
-    )
-    fecha_captado = models.DateField(
-        "Fecha de captado", null=True, blank=True, default=date.today
-    )
-    fecha_cc = models.DateField(
-        "Fecha de contrato en el cargo", null=True, blank=True, default=date.today
-    )
-    nuevo_ingreso = models.BooleanField(
-        "Nuevo ingreso", blank=True, null=True, default=True
-    )
     ajtvjt = models.ForeignKey(
         AjtVjt,
         on_delete=models.SET_NULL,
@@ -223,33 +227,21 @@ class Empleados(CommonFields):
         null=True,
         default=None,
     )
-    bloque = models.CharField(
-        "Bloque", max_length=150, blank=True, null=True, default=None
-    )
     aptoabg = models.CharField(
         "Apartamento de albergado", max_length=150, blank=True, null=True, default=None
+    )
+    bloque = models.CharField(
+        "Bloque", max_length=150, blank=True, null=True, default=None
     )
     cuarto = models.CharField(
         "Cuarto", max_length=150, blank=True, null=True, default=None
     )
+    po = models.CharField(
+        "Parada omnibus", max_length=150, blank=True, null=True, default=None
+    )
+    ruta = models.CharField("Ruta", max_length=150, blank=True, null=True, default=None)
     pantry = models.CharField(
         "Pantry", max_length=150, blank=True, null=True, default=None
-    )
-    turno = models.ForeignKey(
-        Turno,
-        on_delete=models.SET_NULL,
-        verbose_name="Turno",
-        blank=True,
-        null=True,
-        default=None,
-    )
-    pase = models.ForeignKey(
-        Pase,
-        on_delete=models.SET_NULL,
-        verbose_name="Pase (RTD)",
-        blank=True,
-        null=True,
-        default=None,
     )
     foto = models.TextField("Foto", null=True, blank=True)
 

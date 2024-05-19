@@ -1,7 +1,8 @@
-import { Container, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import { MuiFileInput } from "mui-file-input";
 import { useEffect, useState } from "react";
 import { AttachFile } from "@mui/icons-material";
+import Px from "./pp";
 
 export default function Formulario() {
   const [file, setFile] = useState(null);
@@ -16,27 +17,27 @@ export default function Formulario() {
 
   return (
     <>
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Paper sx={{ p: 2, display: "block", flexDirection: "column" }}>
-          <h1>Form1</h1>
-          <h1>Form2</h1>
-          <h1>Form3</h1>
-          <h1>Form4</h1>
-          <MuiFileInput value={file} onChange={handleChange} />
-          <MuiFileInput
-            value={file}
-            onChange={handleChange}
-            size="medium"
-            variant="outlined"
-            InputProps={{
-              inputProps: {
-                accept: "image/*",
-              },
-              startAdornment: <AttachFile />,
-            }}
-          />
-        </Paper>
-      </Container>
+      <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+        <h1>Form1</h1>
+
+        <Px>
+          <h1>Suerte</h1>
+          <p>esto es de los hijos al padre</p>
+        </Px>
+
+        <MuiFileInput
+          value={file}
+          onChange={handleChange}
+          size="medium"
+          variant="outlined"
+          InputProps={{
+            inputProps: {
+              accept: "image/*",
+            },
+            startAdornment: <AttachFile />,
+          }}
+        />
+      </Paper>
     </>
   );
 }

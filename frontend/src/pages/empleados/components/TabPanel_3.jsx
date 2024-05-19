@@ -1,5 +1,5 @@
 import { TabPanel } from "@mui/lab";
-import { AutoCompletar, CampoTexto } from "../../../components/mui";
+import { AutoCompletar } from "../../../components/mui";
 import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 import { RUTAS_API } from "../../../constants";
@@ -25,18 +25,19 @@ export default function TabPanel_3({ comun }) {
         m={2}
         gridTemplateColumns="repeat(12, 1fr)"
       >
-        {/*//! Nuevo ingreso */}
-        <CuadroChequeo
-          name="nuevo_ingreso"
-          label="Nuevo ingreso"
-          span="3"
-          {...comun}
-        />
+        <Box gridColumn="span 3" textAlign="center">
+          {/*//! Nuevo ingreso */}
+          <CuadroChequeo
+            name="nuevo_ingreso"
+            label="Nuevo ingreso"
+            {...comun}
+          />
+        </Box>
 
         {/* //! Proyectos*/}
         {!proyecto.loading && (
           <AutoCompletar
-            name="proyectos"
+            name="proyecto"
             label="Proyecto"
             options={proyecto.data}
             span="4"
@@ -84,14 +85,10 @@ export default function TabPanel_3({ comun }) {
             {...comun}
           />
         )}
-
-        {/* //! Cobra por tarjeta */}
-        <CuadroChequeo
-          name="cpt"
-          label="Cobra por tarjeta"
-          span="3"
-          {...comun}
-        />
+        <Box gridColumn="span 3" textAlign="center">
+          {/* //! Cobra por tarjeta */}
+          <CuadroChequeo name="cpt" label="Cobra por tarjeta" {...comun} />
+        </Box>
 
         {/* //! Turno */}
         {!turno.loading && (
@@ -120,13 +117,6 @@ export default function TabPanel_3({ comun }) {
           name="fecha_captado"
           label="Fecha de captado"
           span="3"
-          {...comun}
-        />
-
-        <CampoTexto
-          name="nip"
-          label="Número de identificación personal"
-          span="6"
           {...comun}
         />
       </Box>

@@ -6,6 +6,7 @@ export default function CampoTexto({
   name,
   control,
   label,
+  type,
   span,
   multiline,
   rows,
@@ -20,6 +21,7 @@ export default function CampoTexto({
       size="small"
       variant="outlined"
       label={label}
+      type={type || "text"}
       sx={span ? { gridColumn: `span ${span}` } : null}
       multiline={!!multiline}
       rows={rows ? rows : 1}
@@ -32,6 +34,7 @@ export default function CampoTexto({
 CampoTexto.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
+  type: PropTypes.string,
   control: PropTypes.object,
   span: PropTypes.string,
   multiline: PropTypes.bool,

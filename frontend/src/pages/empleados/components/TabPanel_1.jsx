@@ -1,5 +1,5 @@
 import { TabPanel } from "@mui/lab";
-import { AutoCompletar, CampoTexto } from "../../../components/mui";
+import { AutoCompletar, CampoTexto, Fecha } from "../../../components/mui";
 import { Box, Divider } from "@mui/material";
 import PropTypes from "prop-types";
 import { field_color_piel, field_sexo } from "../resources/campos";
@@ -32,7 +32,13 @@ export default function TabPanel_1({ comun }) {
           span="4"
           {...comun}
         />
-        <CampoTexto name="ci" label="Número de Identidad" span="3" {...comun} />
+        <CampoTexto
+          type="number"
+          name="ci"
+          label="Número de Identidad"
+          span="3"
+          {...comun}
+        />
         <AutoCompletar
           name="sexo"
           options={field_sexo}
@@ -80,7 +86,14 @@ export default function TabPanel_1({ comun }) {
           />
         )}
 
-        <CampoTexto name="ag" label="Año de graduado" span="6" {...comun} />
+        {/* //! Año de graduado */}
+        <Fecha
+          name="ag"
+          label="Año de graduado"
+          span="6"
+          views={["year"]}
+          {...comun}
+        />
 
         {/* //! Procedencias */}
         {!procedencia.loading && (

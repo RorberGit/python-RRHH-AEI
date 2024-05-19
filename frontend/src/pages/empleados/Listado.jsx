@@ -45,6 +45,8 @@ export default function Listado() {
   const handleFile = async (event) => {
     event.preventDefault();
 
+    console.info(event.target.files)
+
     getBase64(event.target.files[0])
       .then((response) => {
         console.info(response);

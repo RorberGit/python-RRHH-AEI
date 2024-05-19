@@ -2,7 +2,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { useController } from "react-hook-form";
 import PropTypes from "prop-types";
 
-export default function Autocompletar({
+export default function AutoCompletar({
   name,
   control,
   label,
@@ -17,10 +17,11 @@ export default function Autocompletar({
 
   return (
     <Autocomplete
-      {...field}
       multiple={!!multiple}
       disablePortal
       options={options}
+      value={field.value}
+      defaultValue={field.value}
       onChange={onChange ? onChange : (_, value) => field.onChange(value)}
       getOptionLabel={(option) => option.nombre}
       isOptionEqualToValue={(option, value) =>
@@ -32,6 +33,7 @@ export default function Autocompletar({
         <TextField
           {...params}
           label={label}
+          onBlur={field.onBlur}
           error={!!errors[name]}
           helperText={errors[name] ? errors[name].message : ""}
         />
@@ -40,11 +42,11 @@ export default function Autocompletar({
   );
 }
 
-Autocompletar.propTypes = {
+AutoCompletar.propTypes = {
   label: PropTypes.string,
   control: PropTypes.object,
   name: PropTypes.string,
-  options: PropTypes.array,  
+  options: PropTypes.array,
   onChange: PropTypes.func,
   span: PropTypes.string,
   multiple: PropTypes.bool,

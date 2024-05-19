@@ -1,7 +1,12 @@
-from rest_framework import generics, permissions, filters
+from django.db.models import Max
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics, permissions
+
 from .models import Empleados
 from .serializers import EmpleadosSerializers
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 class ListEmpleados(generics.ListAPIView):
@@ -46,3 +51,11 @@ class FilterEmpleados(generics.ListAPIView):
     """ filterset_fields = serializer_class.Meta.fields """
     # ordering_fields = ['edad']
     ordering = ["created_at"]
+
+
+class MaxNIP(APIView):
+    """obtener maximo numero"""
+
+    def get(self, _):
+        max_nip = Empleados.objects.all().aggregate(max_number=Max("nip"))["max_number"]
+        return Response({"max_nip": max_nip})

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -41,8 +41,8 @@
     "react-router-dom": "^6.23.0",
     "redux": "^5.0.1",
     "sort-by": "^1.2.0",
-    "styled-components": "^6.1.9",
-    "sweetalert2": "^11.10.8",
+    "styled-components": "^6.1.11",
+    "sweetalert2": "^11.11.0",
     "utf8": "^3.0.0",
     "uuid": "^9.0.1",
     "yup": "^1.4.0"

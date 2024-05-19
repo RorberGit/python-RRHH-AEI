@@ -7,7 +7,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PropTypes from "prop-types";
 import { useController } from "react-hook-form";
 
-export default function Fecha({ name, control, label, span }) {
+export default function Fecha({ name, control, label, span, views }) {
   const { field, formState } = useController({ name, control });
 
   const { errors } = formState;
@@ -27,7 +27,7 @@ export default function Fecha({ name, control, label, span }) {
             {...field}
             label={label}
             value={field.value}
-            views={["year", "month", "day"]}
+            views={views ? views : ["year", "month", "day"]}
             onChange={(e) => field.onChange(e)}
             slotProps={{
               textField: {
@@ -46,10 +46,8 @@ Fecha.propTypes = {
   name: PropTypes.string,
   control: PropTypes.object,
   label: PropTypes.string,
-  value: PropTypes.object,
-  setFieldValue: PropTypes.func,
+  views: PropTypes.array,
   field: PropTypes.string,
-  touched: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   errors: PropTypes.string,
   span: PropTypes.string,
 };
