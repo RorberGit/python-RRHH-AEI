@@ -10,4 +10,5 @@ urlpatterns = [
     path("delete/<pk>", views.DeleteEmpleados.as_view(), name="Delete"),
     path("filter/", views.FilterEmpleados.as_view(), name="Filter"),
     path("max/", views.MaxNIP.as_view(), name="MAX"),
+    path("bynip/<int:nip>/", views.RetriveEmpleadosByNip.as_view(), name="Retrieve by NIP"),
 ]

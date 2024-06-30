@@ -1,7 +1,7 @@
 import { RUTAS_API } from "../constants";
 import axios from "../api/axios";
 import { useDispatch } from "react-redux";
-import { resetUser } from "../store/user/userSlice";
+import { resetUser } from "../redux/user/userSlice";
 import { Token } from "../services";
 //import axios from "../api/axios";
 //import { RUTAS_API } from "../constants";

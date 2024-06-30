@@ -1,13 +1,13 @@
-from rest_framework import generics, permissions, status, filters
-from .serializers import RegisterUserSerializers, ViewUserSerializers
+from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
+from rest_framework import filters, generics, permissions, status
+from rest_framework.exceptions import AuthenticationFailed, NotAcceptable
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import AuthenticationFailed, NotAcceptable
-from .models import Usuario as User
-from django.contrib.auth import authenticate, login, logout
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from django.db.models import Q
+from .models import Usuario as User
+from .serializers import RegisterUserSerializers, ViewUserSerializers
 from .token import get_tokens_for_user
 
 
@@ -44,8 +44,10 @@ class LoginUser(APIView):
             check_user = User.objects.get(username=username)
         except User.DoesNotExist:
             raise AuthenticationFailed("Cuenta de usuario inexistente.")
+
         if check_user is None:
             raise AuthenticationFailed("Usuario no existe.")
+
         if not check_user.check_password(password):
             raise AuthenticationFailed("Contraseña incorrecta.")
 
@@ -58,11 +60,11 @@ class LoginUser(APIView):
             return Response(
                 {**serializer_user.data, **token}, status=status.HTTP_200_OK
             )
-        else:
-            return Response(
-                {"detail": "Credenciales incorrectas."},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+
+        return Response(
+            {"detail": "Credenciales incorrectas."},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
 
 
 class LogoutUser(APIView):

@@ -6,8 +6,14 @@ export default function Empleados() {
   return (
     <>
       <Routes>
-        <Route path="listing" element={<Listado />} />
-        <Route path="create" element={<Formulario />} />
+        <Route
+          path="listing"
+          element={<Listado />}
+        />
+        <Route
+          path="create"
+          element={<Formulario />}
+        />
       </Routes>
     </>
   );

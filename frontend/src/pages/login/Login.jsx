@@ -9,7 +9,6 @@ import {
   Stack,
   Alert,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { auth } from "../../services/auth";
@@ -18,8 +17,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLogout } from "../../hooks/useLogout";
 import { useDispatch } from "react-redux";
-import { createUser } from "../../store/user/userSlice";
+import { createUser } from "../../redux/user/userSlice";
 import { Token } from "../../services";
+
+import BBI from "./assets/img/bbi.jpg";
+import UCM from "./assets/img/ucm.jpg";
 
 const defaultTheme = createTheme();
 
@@ -86,19 +88,8 @@ export default function Login() {
           }}
         >
           <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
-            <Avatar
-              src="assets/img/ucm.jpg"
-              variant="square"
-              sx={{ width: 60, height: 50 }}
-            />
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Avatar
-              src="assets/img/bbi.jpg"
-              variant="square"
-              sx={{ width: 80, height: 50 }}
-            />
+            <Avatar src={UCM} variant="square" sx={{ width: 60, height: 50 }} />
+            <Avatar src={BBI} variant="square" sx={{ width: 80, height: 50 }} />
           </Stack>
 
           <Typography component="h1" variant="h5">

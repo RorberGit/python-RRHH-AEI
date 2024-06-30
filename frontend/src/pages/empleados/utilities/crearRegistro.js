@@ -26,6 +26,7 @@ export const crearRegistro = (data) => {
     camisa,
     calzado,
     estado_vivienda,
+    ajtvjt,
   } = data;
 
   return {
@@ -55,5 +56,6 @@ export const crearRegistro = (data) => {
     camisa: camisa?.id || null,
     calzado: calzado?.id || null,
     estado_vivienda: estado_vivienda?.id || null,
+    ajtvjt: ajtvjt?.id || null,
   };
 };

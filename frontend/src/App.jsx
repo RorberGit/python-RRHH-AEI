@@ -4,8 +4,20 @@ import { Layout } from "./components";
 import { Dashboard } from "./pages/dashboard";
 import { Suspense } from "react";
 import Usuarios from "./pages/usuarios";
+import { useEffect } from "react";
+
+import FAVICON from "./assets/favicon.ico";
+import Asistencia from "./pages/asistencia";
 
 function App() {
+  //Configurar parametros del documento
+  useEffect(() => {
+    document.title = "Fuerza de Trabajo";
+
+    const favicon = document.querySelector("link[rel*='icon']");
+    favicon.href = FAVICON;
+  }, []);
+
   return (
     <>
       <Routes>
@@ -13,6 +25,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="ontime" element={<Asistencia />} />
           <Route
             path="users/*"
             element={

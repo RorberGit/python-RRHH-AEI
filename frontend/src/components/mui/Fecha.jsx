@@ -3,7 +3,6 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { esES } from "@mui/x-date-pickers/locales";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/es";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PropTypes from "prop-types";
 import { useController } from "react-hook-form";
 
@@ -20,23 +19,20 @@ export default function Fecha({ name, control, label, span, views }) {
         adapterLocale="es"
         localeText={
           esES.components.MuiLocalizationProvider.defaultProps.localeText
-        }
-      >
-        <DemoContainer components={["DatePicker"]}>
-          <DatePicker
-            {...field}
-            label={label}
-            value={field.value}
-            views={views ? views : ["year", "month", "day"]}
-            onChange={(e) => field.onChange(e)}
-            slotProps={{
-              textField: {
-                size: "small",
-                helperText: errors[name] ? errors[name].message : "",
-              },
-            }}
-          />
-        </DemoContainer>
+        }>
+        <DatePicker
+          {...field}
+          label={label}
+          value={field.value}
+          views={views ? views : ["year", "month", "day"]}
+          onChange={(e) => field.onChange(e)}
+          slotProps={{
+            textField: {
+              size: "small",
+              helperText: errors[name] ? errors[name].message : "",
+            },
+          }}
+        />
       </LocalizationProvider>
     </Box>
   );

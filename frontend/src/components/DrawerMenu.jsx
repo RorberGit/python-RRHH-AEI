@@ -1,15 +1,13 @@
 import MuiDrawer from "@mui/material/Drawer";
-import {
-  Divider,
-  IconButton,
-  List,
-  ListSubheader,
-  Toolbar,
-  styled,
-} from "@mui/material";
+import { IconButton, Toolbar, styled } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { ListConfig, ListDefault, ListLogout } from "./ListItems";
 import { useState } from "react";
+import MenuItem from "./MenuItem";
+import { Dashboard } from "@mui/icons-material";
+import { Person } from "@mui/icons-material";
+import { PersonAdd } from "@mui/icons-material";
+import { Logout } from "@mui/icons-material";
+import { People } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -40,6 +38,65 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
+const ListItems = [
+  {
+    divider: true,
+  },
+  {
+    icon: <Dashboard />,
+    title: "Dashboard",
+    path: "/",
+  },
+  {
+    icon: <Person />,
+    title: "Asistencia",
+    path: "ontime",
+  },
+  {
+    icon: <Person />,
+    title: "Empleados",
+    children: [
+      {
+        icon: <Person />,
+        title: "Listar",
+        path: "employee/listing",
+      },
+      {
+        icon: <PersonAdd />,
+        title: "Crear",
+        path: "employee/create",
+      },
+    ],
+  },
+  {
+    divider: true,
+  },
+  {
+    icon: <Person />,
+    title: "Usuarios",
+    children: [
+      {
+        title: "Listar",
+        icon: <People />,
+        path: "users/listing",
+      },
+      {
+        title: "Crear",
+        icon: <PersonAdd />,
+        path: "users/form",
+      },
+    ],
+  },
+  {
+    divider: true,
+  },
+  {
+    icon: <Logout />,
+    title: "Cerrar Sesión",
+    path: "login",
+  },
+];
+
 export default function DrawerMenu() {
   const [open, setOpen] = useState(true);
 
@@ -60,19 +117,8 @@ export default function DrawerMenu() {
           {open ? <ChevronLeft /> : <ChevronRight />}
         </IconButton>
       </Toolbar>
-      <Divider />
-      <List component="nav">
-        {<ListDefault />}
-        <Divider sx={{ my: 1 }} />
-        {open && (
-          <ListSubheader component="div" inset>
-            Configuración
-          </ListSubheader>
-        )}
-        {<ListConfig />}
-        <Divider sx={{ my: 1 }} />
-        {<ListLogout />}
-      </List>
+
+      <MenuItem items={ListItems} />
     </Drawer>
   );
 }

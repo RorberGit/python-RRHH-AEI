@@ -1,12 +1,12 @@
 from django.db.models import Max
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics, permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Empleados
 from .serializers import EmpleadosSerializers
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
 
 class ListEmpleados(generics.ListAPIView):
@@ -54,8 +54,21 @@ class FilterEmpleados(generics.ListAPIView):
 
 
 class MaxNIP(APIView):
-    """obtener maximo numero"""
-
     def get(self, _):
+        """obtener maximo numero"""
         max_nip = Empleados.objects.all().aggregate(max_number=Max("nip"))["max_number"]
         return Response({"max_nip": max_nip})
+
+
+class RetriveEmpleadosByNip(APIView):
+    def get(self, _, nip):
+        """Recuperar registro de empleados desde campo NIP
+
+        Args:
+            nip (numeric): Número de Identificación Personal
+        """
+        empleadoss = get_object_or_404(Empleados, nip=nip)
+
+        serializer = EmpleadosSerializers(empleadoss)
+
+        return Response(serializer.data)

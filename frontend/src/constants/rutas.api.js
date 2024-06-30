@@ -37,4 +37,7 @@ export const RUTAS_API = {
     CAMISA: "attire/shirt/",
     CALZADO: "attire/footwear/",
   },
+  asistencia: {
+    JORNADA: "asistencia/timeworkforday",
+  },
 };

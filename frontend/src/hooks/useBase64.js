@@ -6,8 +6,7 @@ export const useBase64 = () => {
       data.readAsDataURL(file);
 
       data.onload = () => {
-        const result = data.result;
-        console.info(result);
+        const result = data.result;        
         resolve(result);
       };
 

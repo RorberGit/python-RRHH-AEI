@@ -49,9 +49,10 @@ INSTALLED_APPS = [
     "organizacion",
     "integracion",
     "localidad",
-    "auth_user",        
+    "auth_user",
     "vestimenta",
     "otros",
+    "asistencia",
 ]
 
 AUTH_USER_MODEL = "auth_user.Usuario"

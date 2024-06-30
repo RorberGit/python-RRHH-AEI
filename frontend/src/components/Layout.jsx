@@ -3,6 +3,7 @@ import Head from "./Head";
 import DrawerMenu from "./DrawerMenu";
 import {
   Box,
+  Container,
   CssBaseline,
   ThemeProvider,
   Toolbar,
@@ -33,8 +34,12 @@ export default function Layout() {
           }}
         >
           <Toolbar />
-
-          <Outlet />
+          <Container
+            maxWidth="lg"
+            sx={{ mt: 4, mb: 4 }}
+          >
+            <Outlet />
+          </Container>
         </Box>
       </Box>
     </ThemeProvider>

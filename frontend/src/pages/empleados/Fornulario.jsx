@@ -1,5 +1,4 @@
 import {
-  Container,
   Paper,
   Box,
   Stack,
@@ -7,6 +6,7 @@ import {
   TextField,
   Typography,
   styled,
+  Grid,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -28,9 +28,10 @@ import { AttachFile } from "@mui/icons-material";
 import { useFetch } from "../../hooks/useFetch";
 import { RUTAS_API } from "../../constants";
 import { useBase64 } from "../../hooks/useBase64";
+import axios from "../../api/axios";
 
 const Img = styled("img")({
-  width: 200,
+  width: "100%",
   height: "100%",
   objectFit: "cover",
   objectPosition: "center",
@@ -52,14 +53,17 @@ export default function Formulario() {
 
   const base64 = useBase64();
 
-  console.log("first ", nipData);
-
   /* //!funsion submit del formulario */
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log("first :>", data);
 
     const row = crearRegistro(data);
+
+    const create = await axios.post(RUTAS_API.EMPLOYEE.CREATE, row);
+
     console.info(row);
+
+    console.log("create :>> ", create);
   };
 
   useEffect(() => {
@@ -77,7 +81,10 @@ export default function Formulario() {
   const handleChangeFile = (newFile) => {
     console.log(newFile);
 
-    base64(newFile).then((response) => setFile(response));
+    base64(newFile).then((response) => {
+      setFile(response);
+      setValue("foto", response);
+    });
   };
 
   if (loading)
@@ -88,85 +95,108 @@ export default function Formulario() {
     );
 
   return (
-    <Container fixed>
+    <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack
+        <Grid
+          container
           spacing={2}
-          direction="row"
-          sx={{ mt: 4 }}>
-          <Paper
-            variant="outlined"
-            style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <Img src={file}></Img>
-            <MuiFileInput
-              value={file}
-              onChange={handleChangeFile}
-              size="medium"
+        >
+          <Grid
+            item
+            xs={12}
+            md={4}
+            lg={3}
+          >
+            <Paper
               variant="outlined"
-              InputProps={{
-                inputProps: {
-                  accept: "image/*",
-                },
-                startAdornment: <AttachFile />,
+              sx={{
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                gap: "10px",
               }}
-            />
-          </Paper>
-          <Paper sx={{ p: 2 }}>
-            {/* //!Campo para el numero de identificacion personal */}
-            <Stack
-              spacing={2}
-              direction="row"
-              sx={{ ml: 5 }}>
-              <Typography variant="subtitle1">
-                Número de Identificación Personal
-              </Typography>
-              <TextField
-                {...register("nip")}
-                variant="standard"
-                type="text"
+            >
+              <Img src={file}></Img>
+              <MuiFileInput
+                value={file}
+                onChange={handleChangeFile}
+                size="medium"
+                variant="outlined"
                 InputProps={{
-                  readOnly: true,
+                  inputProps: {
+                    accept: "image/*",
+                  },
+                  startAdornment: <AttachFile />,
                 }}
-                sx={{ maxWidth: "60px", textAlign: "center", fontSize: 40 }}
               />
-            </Stack>
+            </Paper>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={8}
+            lg={9}
+          >
+            <Paper sx={{ p: 2 }}>
+              {/* //!Campo para el numero de identificacion personal */}
+              <Stack
+                spacing={2}
+                direction="row"
+                sx={{ ml: 5 }}
+              >
+                <Typography variant="subtitle1">
+                  Número de Identificación Personal
+                </Typography>
+                <TextField
+                  {...register("nip")}
+                  variant="standard"
+                  type="text"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  sx={{ maxWidth: "60px", textAlign: "center", fontSize: 40 }}
+                />
+              </Stack>
 
-            {/* //!Contenedor global de los Tab*/}
-            <TabContenedor>
-              {/* //! Datos personales */}
-              <TabPanel_1 comun={comun} />
+              {/* //!Contenedor global de los Tab*/}
+              <TabContenedor>
+                {/* //! Datos personales */}
+                <TabPanel_1 comun={comun} />
 
-              {/* //! Dirección particular */}
-              <TabPanel_2
-                comun={comun}
-                setValue={setValue}
-              />
+                {/* //! Dirección particular */}
+                <TabPanel_2
+                  comun={comun}
+                  setValue={setValue}
+                />
 
-              {/* //! Datos laborales */}
-              <TabPanel_3 comun={comun} />
+                {/* //! Datos laborales */}
+                <TabPanel_3 comun={comun} />
 
-              {/*//! Afiliaciones */}
-              <TabPanel_4 comun={comun} />
+                {/*//! Afiliaciones */}
+                <TabPanel_4 comun={comun} />
 
-              {/* //! Vestimenta de trabajo */}
-              <TabPanel_5 comun={comun} />
+                {/* //! Vestimenta de trabajo */}
+                <TabPanel_5 comun={comun} />
 
-              {/* //! Vivienda */}
-              <TabPanel_6 comun={comun} />
+                {/* //! Vivienda */}
+                <TabPanel_6 comun={comun} />
 
-              {/* //! Alojamiento */}
-              <TabPanel_7 comun={comun} />
-            </TabContenedor>
-            <Box sx={{ textAlign: "right", pr: 4 }}>
-              <Button
-                type="submit"
-                variant="contained">
-                Aceptar
-              </Button>
-            </Box>
-          </Paper>
-        </Stack>
+                {/* //! Alojamiento */}
+                <TabPanel_7 comun={comun} />
+              </TabContenedor>
+              <Box sx={{ textAlign: "right", pr: 4 }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                >
+                  Aceptar
+                </Button>
+              </Box>
+            </Paper>
+          </Grid>
+        </Grid>
       </form>
-    </Container>
+    </>
   );
 }

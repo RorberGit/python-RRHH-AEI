@@ -4,7 +4,7 @@ from django.db import models
 from simple_history.models import HistoricalRecords
 
 from common.models import CommonFields
-from empleados.api.fields_chocices import ESTADO_VIENDA_CHOICE
+from empleados.api.fields_chocices import ENTRADA_SALIDA_CHOICE, ESTADO_VIENDA_CHOICE
 from localidad.models import Municipio, Provincia
 from organizacion.api.models import Cargos, Especialidades, Proyectos
 from otros.api.models import Pase, Procedencias, Antdd, Ne, AjtVjt, Turno
@@ -244,6 +244,16 @@ class Empleados(CommonFields):
         "Pantry", max_length=150, blank=True, null=True, default=None
     )
     foto = models.TextField("Foto", null=True, blank=True)
+    estado = models.CharField(
+        "Entrada o Salida",
+        max_length=10,
+        choices=ENTRADA_SALIDA_CHOICE,
+        null=True,
+        default="ENTRADA",
+    )
+    is_active = models.BooleanField(
+        verbose_name="Si esta activo", blank=True, null=True, default=True
+    )
 
     history = HistoricalRecords()
 
