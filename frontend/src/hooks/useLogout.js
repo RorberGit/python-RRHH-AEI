@@ -1,13 +1,10 @@
 import { RUTAS_API } from "../constants";
 import axios from "../api/axios";
-import { useDispatch } from "react-redux";
-import { resetUser } from "../redux/user/userSlice";
 import { Token } from "../services";
-//import axios from "../api/axios";
-//import { RUTAS_API } from "../constants";
+import useReduxUsuario from "../redux/hooks/use-ReduxUsuario";
 
 export const useLogout = () => {
-  const dispatch = useDispatch();
+  const usuario = useReduxUsuario();
 
   const logout = async () => {
     const token = Token.getToken();
@@ -28,7 +25,7 @@ export const useLogout = () => {
       .then((response) => {
         Token.removeToken();
 
-        dispatch(resetUser());
+        usuario.reset();
         console.info("response", response);
       })
       .catch((error) => {

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Token } from "../services";
 
-const useAxiosToken = () => {
+export default function useAxiosToken() {
   const token = Token.getToken();
 
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const useAxiosToken = () => {
       (config) => {
         if (token?.access_token) {
           config.headers["Authorization"] = `Bearer ${token?.access_token}`;
-          console.info("Config :> ", config);
+          /* console.info("Config :> ", config); */
         }
         return config;
       },
@@ -52,6 +52,4 @@ const useAxiosToken = () => {
   }, [location, navigate, token]);
 
   return axiosToken;
-};
-
-export default useAxiosToken;
+}

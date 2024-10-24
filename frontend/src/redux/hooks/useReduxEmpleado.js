@@ -7,7 +7,7 @@ export const useReduxEmpleado = () => {
 
   const list = useSelector((state) => state.empleado);
 
-  const action = useMemo(
+  const store = useMemo(
     () => ({
       list: list,
       create: (body = {}) => dispatch(create(body)),
@@ -16,5 +16,5 @@ export const useReduxEmpleado = () => {
     [dispatch, list]
   );
 
-  return action;
+  return store;
 };

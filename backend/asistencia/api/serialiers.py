@@ -1,8 +1,19 @@
 from rest_framework import serializers
+
+from empleados.serializers import ListEmpleadosSerializers
+
 from .models import HoraEntradaSalida, RegistroEntradaSalida
 
 
-class RegistroEntradaSalidaSerializer(serializers.ModelSerializer):
+class ListRegistroEntradaSalidaSerializer(serializers.ModelSerializer):
+    empleado = ListEmpleadosSerializers()
+
+    class Meta:
+        model = RegistroEntradaSalida
+        fields = "__all__"
+
+
+class CreateRegistroEntradaSalidaSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistroEntradaSalida
         fields = "__all__"

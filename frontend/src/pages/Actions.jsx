@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { createUser, resetUser } from "../redux/user/userSlice";
+import { createUser, resetUser } from "../redux/slices/userSlice";
 
 export default function Actions() {
   const user = useSelector((state) => state.user);

@@ -1,9 +1,12 @@
 from django.db.models import Max
-from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics, permissions
 from rest_framework.response import Response
+from django.db.models import Q
 from rest_framework.views import APIView
+from rest_framework.exceptions import NotFound
+
+from empleados.api.share_serializers import ListFullEmpleadosSerializers
 
 from .models import Empleados
 from .serializers import EmpleadosSerializers
@@ -12,15 +15,42 @@ from .serializers import EmpleadosSerializers
 class ListEmpleados(generics.ListAPIView):
     queryset = Empleados.objects.all().order_by("created_at")
     serializer_class = EmpleadosSerializers
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.OrderingFilter]
 
 
-class RetrieveEmpleados(generics.RetrieveAPIView):
-    queryset = Empleados.objects.all().order_by("created_at")
-    serializer_class = EmpleadosSerializers
-    permission_classes = [permissions.AllowAny]
-    filter_backends = [filters.OrderingFilter]
+class RetrieveEmpleados(APIView):
+    """Generar un APIView que debuelva una lista de empleados
+
+    Args:
+        NIP: Número de identificación personal
+    """
+    def get(self, request):
+        filters = Q()
+        
+        # Parametros de consulta
+        nip = request.query_params.get('nip')
+        proyecto = request.query_params.get('proyecto')
+        
+        # Aplicar filtros si se proporcionan
+        if nip:
+            filters &= Q(nip=nip)
+        if proyecto:
+            filters &= Q(proyecto__nombre=proyecto)
+        
+        # Obtener empleados filtrados
+        empleados = Empleados.objects.filter(filters)
+        
+        # Verificar si hay resultados
+        if not empleados.exists():
+            raise NotFound("No se encontraron empleados con los criterios especificados.")
+        
+        # Serializar los resultados
+        serializer = ListFullEmpleadosSerializers(empleados, many=True)
+        
+        # Retornar los resultados
+        return Response(serializer.data)
+
 
 
 class CreateEmpleados(generics.CreateAPIView):
@@ -67,8 +97,11 @@ class RetriveEmpleadosByNip(APIView):
         Args:
             nip (numeric): Número de Identificación Personal
         """
-        empleadoss = get_object_or_404(Empleados, nip=nip)
+        try:
+            empleados = Empleados.objects.get(nip=nip)
+        except Empleados.DoesNotExist as e:
+            raise NotFound(f"Registro no encontrado para NIP: {nip}") from e
 
-        serializer = EmpleadosSerializers(empleadoss)
+        serializer = ListFullEmpleadosSerializers(empleados)
 
         return Response(serializer.data)

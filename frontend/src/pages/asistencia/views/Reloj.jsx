@@ -1,22 +1,16 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import mostrarHora from "../../../utilities/mostrarHora";
 
-//Componente para mostar un reloj en pantalla
+// Componente para mostrar un reloj en pantalla
 export default function Reloj() {
-  //Stado para el reloj
-  const [time, setTime] = useState(new Date());
+  const [hora, setHora] = useState(mostrarHora());
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date());
+    const intervalo = setInterval(() => {
+      setHora(mostrarHora());
     }, 1000);
-    return () => clearInterval(interval);
+    return () => clearInterval(intervalo);
   }, []);
 
-  return (
-    <>
-      {/* Mostrar el reloj centrado en pantalla */}
-      <h2 style={{ textAlign: "center" }}>{time.toLocaleTimeString()}</h2>
-    </>
-  );
+  return <h2 style={{ textAlign: "center" }}>{hora}</h2>;
 }

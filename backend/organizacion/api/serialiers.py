@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from empleados.serializers import EmpleadosSerializers
 
-from .models import Especialidades, Proyectos, AreaDpto
+from .models import Cargos, Especialidades, Proyectos, AreaDpto
 
 
 class ProyectosSerializer(serializers.ModelSerializer):
@@ -21,8 +21,9 @@ class AreaDptoSerializer(serializers.ModelSerializer):
 
 class CargosSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Proyectos
+        model = Cargos
         fields = "__all__"
+
 
 class EspecialidadesSerializer(serializers.ModelSerializer):
     class Meta:

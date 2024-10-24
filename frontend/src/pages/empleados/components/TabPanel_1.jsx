@@ -3,13 +3,13 @@ import { AutoCompletar, CampoTexto, Fecha } from "../../../components/mui";
 import { Box, Divider } from "@mui/material";
 import PropTypes from "prop-types";
 import { field_color_piel, field_sexo } from "../resources/campos";
-import { useFetch } from "../../../hooks/useFetch";
 import { RUTAS_API } from "../../../constants";
+import useGetData from "../../../hooks/use-GetData";
 
 export default function TabPanel_1({ comun }) {
-  const nivel_escolar = useFetch(RUTAS_API.OTHER.NIVEL_ESCOLAR);
-  const especialidad = useFetch(RUTAS_API.organization.ESPECIALIDAD);
-  const procedencia = useFetch(RUTAS_API.OTHER.PROCEDENCIA);
+  const nivel_escolar = useGetData(RUTAS_API.OTHER.NIVEL_ESCOLAR);
+  const especialidad = useGetData(RUTAS_API.organization.ESPECIALIDAD);
+  const procedencia = useGetData(RUTAS_API.OTHER.PROCEDENCIA);
 
   return (
     <TabPanel value="1">
@@ -19,7 +19,12 @@ export default function TabPanel_1({ comun }) {
         m={2}
         gridTemplateColumns="repeat(12, 1fr)"
       >
-        <CampoTexto name="nombre" label="Nombre" span="4" {...comun} />
+        <CampoTexto
+          name="nombre"
+          label="Nombre"
+          span="4"
+          {...comun}
+        />
         <CampoTexto
           name="apellido_paterno"
           label="Apellido paterno"
@@ -53,7 +58,12 @@ export default function TabPanel_1({ comun }) {
           span="3"
           {...comun}
         />
-        <CampoTexto name="telefono" label="Teléfono" span="3" {...comun} />
+        <CampoTexto
+          name="telefono"
+          label="Teléfono"
+          span="3"
+          {...comun}
+        />
       </Box>
 
       <Divider />

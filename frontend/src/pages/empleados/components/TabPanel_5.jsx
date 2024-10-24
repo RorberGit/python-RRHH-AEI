@@ -1,14 +1,14 @@
 import { TabPanel } from "@mui/lab";
 import { Box } from "@mui/material";
 import PropTypes from "prop-types";
-import { useFetch } from "../../../hooks/useFetch";
 import { RUTAS_API } from "../../../constants/rutas.api";
 import Autocompletar from "../../../components/mui/AutoCompletar";
+import useGetData from "../../../hooks/use-GetData";
 
 export default function TabPanel_5({ comun }) {
-  const pantalon = useFetch(RUTAS_API.vestimenta.PANTALON);
-  const camisa = useFetch(RUTAS_API.vestimenta.CAMISA);
-  const calzado = useFetch(RUTAS_API.vestimenta.CALZADO);
+  const pantalon = useGetData(RUTAS_API.vestimenta.PANTALON);
+  const camisa = useGetData(RUTAS_API.vestimenta.CAMISA);
+  const calzado = useGetData(RUTAS_API.vestimenta.CALZADO);
 
   return (
     <TabPanel value="5">

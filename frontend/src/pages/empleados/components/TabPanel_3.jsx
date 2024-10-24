@@ -3,19 +3,19 @@ import { AutoCompletar } from "../../../components/mui";
 import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 import { RUTAS_API } from "../../../constants";
-import { useFetch } from "../../../hooks/useFetch";
 import CuadroChequeo from "../../../components/mui/CuadroChequeo";
 import Fecha from "../../../components/mui/Fecha";
+import useGetData from "../../../hooks/use-GetData";
 
 export default function TabPanel_3({ comun }) {
-  const proyecto = useFetch(RUTAS_API.organization.PROYECTO);
-  const area = useFetch(RUTAS_API.organization.AREA);
-  const cargo = useFetch(RUTAS_API.organization.CARGO);
+  const proyecto = useGetData(RUTAS_API.organization.PROYECTO);
+  const area = useGetData(RUTAS_API.organization.AREA);
+  const cargo = useGetData(RUTAS_API.organization.CARGO);
 
-  const antiguedad = useFetch(RUTAS_API.OTHER.ANTIGUEDAD);
+  const antiguedad = useGetData(RUTAS_API.OTHER.ANTIGUEDAD);
 
-  const turno = useFetch(RUTAS_API.OTHER.TURNO);
-  const pase = useFetch(RUTAS_API.OTHER.PASE);
+  const turno = useGetData(RUTAS_API.OTHER.TURNO);
+  const pase = useGetData(RUTAS_API.OTHER.PASE);
 
   return (
     <TabPanel value="3">
@@ -25,7 +25,10 @@ export default function TabPanel_3({ comun }) {
         m={2}
         gridTemplateColumns="repeat(12, 1fr)"
       >
-        <Box gridColumn="span 3" textAlign="center">
+        <Box
+          gridColumn="span 3"
+          textAlign="center"
+        >
           {/*//! Nuevo ingreso */}
           <CuadroChequeo
             name="nuevo_ingreso"
@@ -85,9 +88,16 @@ export default function TabPanel_3({ comun }) {
             {...comun}
           />
         )}
-        <Box gridColumn="span 3" textAlign="center">
+        <Box
+          gridColumn="span 3"
+          textAlign="center"
+        >
           {/* //! Cobra por tarjeta */}
-          <CuadroChequeo name="cpt" label="Cobra por tarjeta" {...comun} />
+          <CuadroChequeo
+            name="cpt"
+            label="Cobra por tarjeta"
+            {...comun}
+          />
         </Box>
 
         {/* //! Turno */}

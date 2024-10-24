@@ -3,13 +3,14 @@ import { AutoCompletar, CampoTexto } from "../../../components/mui";
 import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useFetch } from "../../../hooks/useFetch";
+
+import useGetData from "../../../hooks/use-GetData";
 
 export default function TabPanel_2({ comun, setValue }) {
   const [municipioData, setMunicipioData] = useState(null);
 
-  const provincia = useFetch("localidad/provincia/");
-  const municipio = useFetch("localidad/municipio/");
+  const provincia = useGetData("localidad/provincia/");
+  const municipio = useGetData("localidad/municipio/");
 
   useEffect(() => {
     setMunicipioData(municipio.data);
@@ -23,12 +24,42 @@ export default function TabPanel_2({ comun, setValue }) {
         m={2}
         gridTemplateColumns="repeat(12, 1fr)"
       >
-        <CampoTexto name="no" label="No" span="2" {...comun} />
-        <CampoTexto name="calle" label="Calle" span="10" {...comun} />
-        <CampoTexto name="entre" label="Entre" span="6" {...comun} />
-        <CampoTexto name="y" label="Y" span="6" {...comun} />
-        <CampoTexto name="edif" label="Edificio" span="2" {...comun} />
-        <CampoTexto name="apto" label="Apartamento" span="3" {...comun} />
+        <CampoTexto
+          name="no"
+          label="No"
+          span="2"
+          {...comun}
+        />
+        <CampoTexto
+          name="calle"
+          label="Calle"
+          span="10"
+          {...comun}
+        />
+        <CampoTexto
+          name="entre"
+          label="Entre"
+          span="6"
+          {...comun}
+        />
+        <CampoTexto
+          name="y"
+          label="Y"
+          span="6"
+          {...comun}
+        />
+        <CampoTexto
+          name="edif"
+          label="Edificio"
+          span="2"
+          {...comun}
+        />
+        <CampoTexto
+          name="apto"
+          label="Apartamento"
+          span="3"
+          {...comun}
+        />
         <CampoTexto
           name="poblado_barrio"
           label="Barrio/Poblado"

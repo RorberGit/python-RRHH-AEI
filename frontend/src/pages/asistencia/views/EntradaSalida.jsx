@@ -1,59 +1,42 @@
-import { useMemo, useEffect, useState } from "react";
 import { RUTAS_API } from "../../../constants";
-import { useFetch } from "../../../hooks/useFetch";
-
-const initialState = {
-  dia_semana: "",
-  hora_entrada: "",
-  hora_salida: "",
-};
-
-const days = [
-  "Domingo",
-  "Lunes",
-  "Martes",
-  "Miercoles",
-  "Jueves",
-  "Viernes",
-  "Sabado",
-];
+import useGetData from "../../../hooks/use-GetData";
+import { useState, useMemo, useEffect } from "react";
+import moment from "moment/min/moment-with-locales";
+import diasSemana from "./diasSemana";
 
 export default function EntradaSalida() {
-  //Almacenar la entrada o la salida
-  const [jornada, setJornada] = useState(initialState);
+  const [jornada, setJornada] = useState(null);
 
-  //Octener día de la semana actual
-  const day = new Date().getDay();
+  const diaActual = useMemo(() => diasSemana[moment().day()], []);
+  const diaActualES = useMemo(() => moment().locale("es").format("dddd"), []);
 
-  //Convertir número del día en nombre
-  const dayName = days[day];
+  const { data, loading } = useGetData(
+    `${RUTAS_API.asistencia.JORNADA}/${diaActual}`
+  );
 
-  //Octener Hora de Entrada y Salida desde API Rest según el dia de la semana
-  const { data } = useFetch(`${RUTAS_API.asistencia.JORNADA}/${dayName}`);
-
-  //Crear un objeto con la entrada y salida
-  const state = useMemo(() => {
-    return data.dia_semana
-      ? {
-          dia_semana: data.dia_semana,
-          hora_entrada: data.hora_entrada,
-          hora_salida: data.hora_salida,
-        }
-      : initialState;
-  }, [data.dia_semana, data.hora_entrada, data.hora_salida]);
-
-  //Guardar el objeto state en el estado jornada
   useEffect(() => {
-    setJornada(state);
-  }, [state]);
+    const { hora_entrada, hora_salida } = data || {};
+
+    if (hora_entrada && hora_salida) {
+      const formatHora = (hora) => moment(hora, "HH:mm").format("h:mm a");
+
+      setJornada({
+        HoraEntrada: formatHora(hora_entrada),
+        HoraSalida: formatHora(hora_salida),
+      });
+    }
+  }, [data]);
+
+  if (loading) return <div>Cargando...</div>;
+  if (!jornada) return <div>Jornada no definida</div>;
 
   return (
     <>
-      <strong>{jornada.dia_semana}</strong>
+      <strong>{diaActualES}</strong>
       <br />
-      Entrada: {jornada.hora_entrada}
+      Entrada: {jornada.HoraEntrada}
       <br />
-      Salida: {jornada.hora_salida}
+      Salida: {jornada.HoraSalida}
     </>
   );
 }

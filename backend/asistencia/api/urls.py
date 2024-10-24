@@ -5,6 +5,7 @@ from .views import (
     CrearEntradaEmpleado,
     HoraEntradaSalidaView,
     RetrieveHoraEntradaSalidaByDay,
+    ListRegistroEntradaSalida,
 )
 
 router = DefaultRouter()
@@ -25,6 +26,11 @@ urlpatterns = [
         r"timeworkforday/<str:dia_semana>/",
         RetrieveHoraEntradaSalidaByDay.as_view(),
         name="timeworkforday",
+    ),
+    path(
+        "registroentrada/",
+        ListRegistroEntradaSalida.as_view(),
+        name="Listar Registro Entrada y Salidad",
     ),
     path(r"timework", include(router.urls)),
 ]

@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
 export function useRouter() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const router = useMemo(
     () => ({
@@ -13,8 +14,10 @@ export function useRouter() {
       reload: () => window.location.reload(),
       push: (href) => navigate(href),
       replace: (href) => navigate(href, { replace: true }),
+      location: (href) =>
+        navigate(href, { state: { from: location }, replace: true }),
     }),
-    [navigate]
+    [location, navigate]
   );
 
   return router;

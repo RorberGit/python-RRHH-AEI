@@ -1,14 +1,14 @@
 import { TabPanel } from "@mui/lab";
 import { Box } from "@mui/material";
 import PropTypes from "prop-types";
-import { useFetch } from "../../../hooks/useFetch";
 import { RUTAS_API } from "../../../constants";
 import Autocompletar from "../../../components/mui/AutoCompletar";
+import useGetData from "../../../hooks/use-GetData";
 
 export default function TabPanel_4({ comun }) {
-  const afiliacion = useFetch(RUTAS_API.integracion.AFILIACION);
-  const organizacion = useFetch(RUTAS_API.integracion.ORGANIZACIONES);
-  const defensa = useFetch(RUTAS_API.integracion.DEFENSA);
+  const afiliacion = useGetData(RUTAS_API.integracion.AFILIACION);
+  const organizacion = useGetData(RUTAS_API.integracion.ORGANIZACIONES);
+  const defensa = useGetData(RUTAS_API.integracion.DEFENSA);
 
   return (
     <TabPanel value="4">

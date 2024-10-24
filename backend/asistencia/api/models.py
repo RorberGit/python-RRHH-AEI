@@ -9,7 +9,10 @@ class RegistroEntradaSalida(CommonFields):
         verbose_name="Fecha y Hora de Entrada", blank=True, null=True, default=None
     )
     fecha_y_hora_salida = models.DateTimeField(
-        verbose_name="Fecha y Hora de Salida", blank=True, null=True, default=None
+        verbose_name="Fecha y Hora de Salida",
+        blank=True,
+        null=True,
+        default=None,
     )
 
     def __str__(self):
@@ -35,7 +38,8 @@ class HoraEntradaSalida(CommonFields):
         ("Domingo", "Domingo"),
     ]
 
-    dia_semana = models.CharField(max_length=10, choices=DIAS_SEMANA, default="Lunes")
+    dia_semana = models.CharField(
+        max_length=10, choices=DIAS_SEMANA, default="Lunes")
 
     hora_entrada = models.TimeField(
         verbose_name="Hora de Entrada", blank=True, null=True, default=None
@@ -46,7 +50,7 @@ class HoraEntradaSalida(CommonFields):
 
     def __str__(self):
         return f"Hora de entrada: {
-                self.hora_entrada} - Hora de salida {self.hora_salida}"
+            self.hora_entrada} - Hora de salida {self.hora_salida}"
 
     class Meta:
         verbose_name = "Hora de entrada y salida"

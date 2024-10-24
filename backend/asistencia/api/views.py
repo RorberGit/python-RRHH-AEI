@@ -1,12 +1,21 @@
 from datetime import datetime
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status
+
+from django.db.models import Q
+
+from rest_framework import status, viewsets
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from empleados.models import Empleados
+from empleados.serializers import EmpleadosSerializers
+
 from .models import HoraEntradaSalida, RegistroEntradaSalida
-from .serialiers import HoraEntradaSalidaSerializer, RegistroEntradaSalidaSerializer
+from .serialiers import (
+    CreateRegistroEntradaSalidaSerializer,
+    HoraEntradaSalidaSerializer,
+    ListRegistroEntradaSalidaSerializer,
+)
 
 
 class CrearEntradaEmpleado(APIView):
@@ -17,14 +26,28 @@ class CrearEntradaEmpleado(APIView):
         """
         nip = request.data.get("nip")
 
-        empleado = Empleados.objects.get(nip=nip)
+        #! Recuperar empleador si existe o emitir una exención
+        try:
+            empleado = Empleados.objects.get(nip=nip)
+        except Empleados.DoesNotExist as e:
+            raise NotFound(f"Empleado con NIP: {nip} no encontrado") from e
 
+        #! Cambiar el estado del empleado
+        serializer_empleado = EmpleadosSerializers(
+            empleado, {"estado": "SALIDA"}, partial=True
+        )
+
+        #! Si todo esta bien guardar los cambios
+        if serializer_empleado.is_valid():
+            serializer_empleado.save()
+
+        #! Guardar la fecha de entrada del emleado especifico
         data = {
             "empleado": empleado.id,
             "fecha_y_hora_entrada": datetime.now(),
         }
 
-        serializer = RegistroEntradaSalidaSerializer(data=data)
+        serializer = CreateRegistroEntradaSalidaSerializer(data=data)
 
         if serializer.is_valid():
             serializer.save()
@@ -51,7 +74,7 @@ class ActualizarSalidaEmpleado(APIView):
             empleado_id=empleado.id, fecha_y_hora_salida=None
         ).latest("fecha_y_hora_entrada")
 
-        serializer = RegistroEntradaSalidaSerializer(registro_entrada)
+        serializer = ListRegistroEntradaSalidaSerializer(registro_entrada)
 
         return Response(serializer.data)
 
@@ -68,11 +91,21 @@ class ActualizarSalidaEmpleado(APIView):
         """
         empleado = Empleados.objects.get(nip=nip)
 
+        serializer_empleado = EmpleadosSerializers(
+            empleado, {"estado": "ENTRADA"}, partial=True
+        )
+
+        if serializer_empleado.is_valid():
+            serializer_empleado.save()
+            print(serializer_empleado.data)
+        else:
+            print(serializer_empleado.errors)
+
         registro_entrada = RegistroEntradaSalida.objects.filter(
             empleado_id=empleado.id, fecha_y_hora_salida=None
         ).latest("fecha_y_hora_entrada")
 
-        serializer = RegistroEntradaSalidaSerializer(
+        serializer = CreateRegistroEntradaSalidaSerializer(
             registro_entrada, data={"fecha_y_hora_salida": datetime.now()}, partial=True
         )
 
@@ -94,9 +127,50 @@ class RetrieveHoraEntradaSalidaByDay(APIView):
         """
         Retrieves the latest entry for an the Hora Entrada and Salida based on their dia de semana.
         """
-        ##entrada_salida = HoraEntradaSalida.objects.get(dia_semana=dia_semana)
-        entrada_salida = get_object_or_404(HoraEntradaSalida, dia_semana=dia_semana)
+        try:
+            entrada_salida = HoraEntradaSalida.objects.get(dia_semana=dia_semana)
+        except HoraEntradaSalida.DoesNotExist as e:
+            raise NotFound(
+                f"Registro no encontrado para día de semana: {dia_semana}"
+            ) from e
 
         serializer = HoraEntradaSalidaSerializer(entrada_salida)
 
+        return Response(serializer.data)
+
+
+# Obtener el registro de entrada o salidad de los empleados
+class ListRegistroEntradaSalida(APIView):
+    def get(self, request):
+        """
+        Mostrar lista de Registro de Entrada y Salidad de Empleados
+        """
+        #! Obtener los query params para la busqueda        
+        nip = request.query_params.get("nip")
+        proyecto = request.query_params.get("proyecto")
+
+        #! Filtros de busqueda vacios
+        filtros = Q()
+
+        #! Crear filtros por cada parametro obtenido
+        if nip:
+            filtros &= Q(empleado__nip=nip)
+
+        if proyecto:
+            filtros &= Q(empleado__proyecto=proyecto)
+
+        #! Si hay filtros, realizar la busqueda sino devolver todos
+        if filtros:
+            result = RegistroEntradaSalida.objects.filter(filtros)
+        else:
+            result = RegistroEntradaSalida.objects.all()
+
+        #! Si no hay resultados de la busqueda
+        if not result.exists():
+            raise NotFound("Registros no encontrados")
+        
+        #! Serializar los resultados, con many=True para retornar una lista de objetos relacionados
+        serializer = ListRegistroEntradaSalidaSerializer(result, many=True)
+        
+        #! Retornar los resultados
         return Response(serializer.data)

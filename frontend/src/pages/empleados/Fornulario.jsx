@@ -25,7 +25,7 @@ import TabContenedor from "./components/TabContenedor";
 import { crearRegistro } from "./utilities/crearRegistro";
 import { MuiFileInput } from "mui-file-input";
 import { AttachFile } from "@mui/icons-material";
-import { useFetch } from "../../hooks/useFetch";
+import useGetData from "../../hooks/use-GetData";
 import { RUTAS_API } from "../../constants";
 import { useBase64 } from "../../hooks/useBase64";
 import axios from "../../api/axios";
@@ -49,7 +49,8 @@ export default function Formulario() {
 
   const comun = { control: control, formState: formState };
 
-  const nipData = useFetch(RUTAS_API.EMPLOYEE.MAX);
+  //! Octener el último numero de empleado
+  const nipData = useGetData(RUTAS_API.EMPLOYEE.MAX);
 
   const base64 = useBase64();
 

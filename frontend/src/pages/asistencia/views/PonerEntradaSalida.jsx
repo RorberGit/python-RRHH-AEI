@@ -1,74 +1,111 @@
 import { TextField } from "@mui/material";
-import { useState } from "react";
 import debounce from "just-debounce-it";
-import useGetEmpleado from "../hooks/useGetEmpleado";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { useMemo } from "react";
+import useReduxCounter from "../../../redux/hooks/useReduxCounter";
+import { useMemo, useState, useEffect, useCallback } from "react";
+import axios from "../../../api/axios";
+import useGetData from "../../../hooks/use-GetData";
 import { useReduxEmpleado } from "../../../redux/hooks/useReduxEmpleado";
-
-const useSearch = () => {
-  const [search, updateSearch] = useState("");
-
-  const isFirstInput = useRef(true);
-
-  useEffect(() => {
-    if (isFirstInput.current) {
-      isFirstInput.current = search === "";
-      return;
-    }
-  }, [search]);
-
-  return { search, updateSearch };
-};
+import Swal from "sweetalert2";
+import { toast, Toaster } from "sonner";
 
 export default function PonerEntradaSalida() {
-  const { search, updateSearch } = useSearch();
-  const { data, error, loading, getEmpleado } = useGetEmpleado({ search });
+  const [nip, setNip] = useState("");
+  const [search, setSearch] = useState(null);
+  const store = useReduxEmpleado();
+  const counter = useReduxCounter();
+  const { data } = useGetData(search);
 
-  const action = useReduxEmpleado();
+  useEffect(() => {
+    if (data) {
+      store.create(data);
+    } else {
+      store.reset();
+    }
+  }, [data, store]);
 
-  console.log("data", data);
-  //Almacenar la data en el Redux, si existe
-  if (data) {
-    action.create(data);
-  }
-
-  console.log("error", error);
-
-  console.log("loading", loading);
-
-  //Funcion para la busqueda
   const debounceGetEmployee = useMemo(
     () =>
-      debounce((search) => {
-        getEmpleado({ search });
-      }, 500),
-    [getEmpleado]
+      debounce((searchNIP) => {
+        setSearch(searchNIP ? `/employee/bynip/${searchNIP}/` : null);
+      }, 300),
+    []
   );
 
-  const handleChange = (event) => {
-    const newNip = event.target.value;
+  const handleChange = useCallback(
+    (event) => {
+      const newNip = event.target.value;
+      setNip(newNip);
+      debounceGetEmployee(newNip);
+    },
+    [debounceGetEmployee]
+  );
 
-    updateSearch(newNip);
+  // Función para manejar el registro de entrada o salida
+  const handleEntradaSalida = useCallback(async () => {
+    // Si no hay datos, salir de la función
+    if (!data) return;
 
-    debounceGetEmployee(newNip);
-  };
+    // Determinar el título y la URL según el estado del empleado
+    const { title, url } =
+      data.estado === "ENTRADA"
+        ? {
+            title: "¿Desea registrar la hora de entrada?",
+            url: "/asistencia/empleados/crear-entrada/",
+          }
+        : {
+            title: "¿Desea registrar la hora de salida?",
+            url: `/asistencia/empleados/${data.nip}/actualizar-salida/`,
+          };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    getEmpleado({ search });
-  };
+    // Mostrar un cuadro de diálogo de confirmación
+    const result = await Swal.fire({
+      title,
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+    });
+
+    // Si el usuario confirma, proceder con el registro
+    if (result.isConfirmed) {
+      // Determinar el método HTTP según el estado
+      const method = data.estado === "ENTRADA" ? axios.post : axios.put;
+      // Realizar la petición al servidor
+      await method(
+        url,
+        data.estado === "ENTRADA" ? { nip: data.nip } : undefined
+      )
+        .then(() => {
+          toast.success("Registro exitoso");
+        })
+        .catch(() => {
+          toast.error("Error al registrar");
+        });
+      // Incrementar el contador
+      counter.increment();
+    }
+  }, [data, counter]);
+
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      handleEntradaSalida();
+      setSearch(null);
+      setNip("");
+    },
+    [handleEntradaSalida]
+  );
 
   return (
-    <>
+    <div>
       <form onSubmit={handleSubmit}>
         <TextField
           name="nip"
           label="NIP del trabajador"
           onChange={handleChange}
+          value={nip}
         />
       </form>
-    </>
+      <Toaster position="bottom-left" richColors />
+    </div>
   );
 }

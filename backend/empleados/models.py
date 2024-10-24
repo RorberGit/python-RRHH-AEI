@@ -4,13 +4,17 @@ from django.db import models
 from simple_history.models import HistoricalRecords
 
 from common.models import CommonFields
-from empleados.api.fields_chocices import ENTRADA_SALIDA_CHOICE, ESTADO_VIENDA_CHOICE
+
 from localidad.models import Municipio, Provincia
-from organizacion.api.models import Cargos, Especialidades, Proyectos
 from otros.api.models import Pase, Procedencias, Antdd, Ne, AjtVjt, Turno
 from vestimenta.api.models import Calzado, Camisa, Pantalon
 
-from .api import COLOR_PIEL_CHOICE, SEXO_CHOISE
+from .api.fields_chocices import (
+    COLOR_PIEL_CHOICE,
+    SEXO_CHOISE,
+    ENTRADA_SALIDA_CHOICE,
+    ESTADO_VIENDA_CHOICE,
+)
 
 # Create your models here.
 
@@ -52,7 +56,7 @@ class Empleados(CommonFields):
         default=None,
     )
     especialidad = models.ForeignKey(
-        Especialidades,
+        "organizacion.Especialidades",
         on_delete=models.SET_NULL,
         verbose_name="Especialidad",
         blank=True,
@@ -107,7 +111,7 @@ class Empleados(CommonFields):
         "Nuevo ingreso", blank=True, null=True, default=True
     )
     proyecto = models.ForeignKey(
-        Proyectos,
+        "organizacion.Proyectos",
         on_delete=models.SET_NULL,
         verbose_name="Proyecto",
         blank=True,
@@ -123,7 +127,7 @@ class Empleados(CommonFields):
         default=None,
     )
     cargo = models.ForeignKey(
-        Cargos,
+        "organizacion.Cargos",
         on_delete=models.SET_NULL,
         verbose_name="Cargo",
         blank=True,

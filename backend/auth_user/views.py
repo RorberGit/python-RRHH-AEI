@@ -1,7 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from rest_framework import filters, generics, permissions, status
-from rest_framework.exceptions import AuthenticationFailed, NotAcceptable
+from rest_framework.exceptions import (
+    AuthenticationFailed,
+    NotAcceptable,
+    PermissionDenied,
+)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -42,8 +46,8 @@ class LoginUser(APIView):
 
         try:
             check_user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            raise AuthenticationFailed("Cuenta de usuario inexistente.")
+        except User.DoesNotExist as e:
+            raise AuthenticationFailed(f"Error al buscar usuario: {str(e)}") from e
 
         if check_user is None:
             raise AuthenticationFailed("Usuario no existe.")
@@ -71,27 +75,35 @@ class LogoutUser(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
+        """Cerrar session"""
         try:
             refresh_token = request.data.get("refresh_token")
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            logout(request)
+            if refresh_token:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+                logout(request)
+                return Response(
+                    {"message": "Cierre de Sesión Exitoso"}, status=status.HTTP_200_OK
+                )
 
-        # return Response({'refresh_token': refresh_token}, status=status.HTTP_205_RESET_CONTENT)
-        except Exception:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        return Response(
-            {"message": "Cierre de Sesion Existoso"}, status=status.HTTP_200_OK
-        )
+            raise AuthenticationFailed("Token de actualización no proporcionado")
+        except AuthenticationFailed as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ListUser(generics.ListAPIView):
-    # queryset = User.objects.all()
-    queryset = User.objects.filter(~Q(username="admin"))  # all()
-    serializer_class = ViewUserSerializers
-    permission_classes = [permissions.AllowAny]
-    filter_backends = [filters.OrderingFilter]
+class ListUser(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        """Function printing python version."""
+        try:
+            if not request.user.is_authenticated:
+                raise PermissionDenied("User is not authenticated")
+            queryset = User.objects.filter(~Q(username="admin"))
+            serializer_class = ViewUserSerializers(queryset, many=True)
+            return Response(serializer_class.data, status=status.HTTP_200_OK)
+        except PermissionDenied as e:
+            return Response({"error": str(e)}, status=status.HTTP_403_FORBIDDEN)
 
 
 class RetrieveUser(generics.RetrieveAPIView):
