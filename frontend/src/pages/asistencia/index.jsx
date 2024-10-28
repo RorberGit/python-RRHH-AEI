@@ -1,5 +1,5 @@
 import { Grid, Paper } from "@mui/material";
-import EntradaSalida from "./views/EntradaSalida";
+import Jornada from "./views/Jornada";
 import Reloj from "./views/Reloj";
 import PonerEntradaSalida from "./views/PonerEntradaSalida";
 import Empleado from "./views/Empleado";
@@ -11,7 +11,7 @@ export default function Asistencia() {
       <Grid container spacing={2}>
         <Grid item xs={12} md={4} lg={3} gap="10px">
           <Paper sx={{ p: 2 }}>
-            <EntradaSalida />
+            <Jornada />
           </Paper>
           <Paper sx={{ mt: 2, p: 2, overflow: "hidden" }}>
             <Reloj />

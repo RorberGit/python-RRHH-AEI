@@ -1,10 +1,10 @@
 import { TextField } from "@mui/material";
 import debounce from "just-debounce-it";
-import useReduxCounter from "../../../redux/hooks/useReduxCounter";
+import useReduxCounter from "../../../redux/hooks/use-ReduxCounter";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import axios from "../../../api/axios";
 import useGetData from "../../../hooks/use-GetData";
-import { useReduxEmpleado } from "../../../redux/hooks/useReduxEmpleado";
+import { useReduxEmpleado } from "../../../redux/hooks/use-ReduxEmpleado";
 import Swal from "sweetalert2";
 import { toast, Toaster } from "sonner";
 
@@ -17,7 +17,7 @@ export default function PonerEntradaSalida() {
 
   useEffect(() => {
     if (data) {
-      store.create(data);
+      store.create(data[0]);
     } else {
       store.reset();
     }
@@ -26,7 +26,7 @@ export default function PonerEntradaSalida() {
   const debounceGetEmployee = useMemo(
     () =>
       debounce((searchNIP) => {
-        setSearch(searchNIP ? `/employee/bynip/${searchNIP}/` : null);
+        setSearch(searchNIP ? `/employee/retrieve/?nip=${searchNIP}` : null);
       }, 300),
     []
   );

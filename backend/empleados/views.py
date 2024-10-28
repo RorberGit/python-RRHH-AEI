@@ -25,32 +25,35 @@ class RetrieveEmpleados(APIView):
     Args:
         NIP: Número de identificación personal
     """
+
     def get(self, request):
-        filters = Q()
-        
+
         # Parametros de consulta
         nip = request.query_params.get('nip')
         proyecto = request.query_params.get('proyecto')
-        
+
+        #! Inicializar filtro de busqueda
+        filters = Q()
+
         # Aplicar filtros si se proporcionan
         if nip:
             filters &= Q(nip=nip)
         if proyecto:
             filters &= Q(proyecto__nombre=proyecto)
-        
+
         # Obtener empleados filtrados
         empleados = Empleados.objects.filter(filters)
-        
+
         # Verificar si hay resultados
         if not empleados.exists():
-            raise NotFound("No se encontraron empleados con los criterios especificados.")
-        
+            raise NotFound(
+                "No se encontraron empleados con los criterios especificados.")
+
         # Serializar los resultados
         serializer = ListFullEmpleadosSerializers(empleados, many=True)
-        
+
         # Retornar los resultados
         return Response(serializer.data)
-
 
 
 class CreateEmpleados(generics.CreateAPIView):
@@ -77,7 +80,7 @@ class FilterEmpleados(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ["id", "nombre", "ci"]
-    ## para poner en el filtrado todos los campos del serializaers
+    # para poner en el filtrado todos los campos del serializaers
     """ filterset_fields = serializer_class.Meta.fields """
     # ordering_fields = ['edad']
     ordering = ["created_at"]
@@ -86,7 +89,8 @@ class FilterEmpleados(generics.ListAPIView):
 class MaxNIP(APIView):
     def get(self, _):
         """obtener maximo numero"""
-        max_nip = Empleados.objects.all().aggregate(max_number=Max("nip"))["max_number"]
+        max_nip = Empleados.objects.all().aggregate(
+            max_number=Max("nip"))["max_number"]
         return Response({"max_nip": max_nip})
 
 

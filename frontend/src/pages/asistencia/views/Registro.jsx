@@ -9,7 +9,7 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import useReduxCounter from "../../../redux/hooks/useReduxCounter";
+import useReduxCounter from "../../../redux/hooks/use-ReduxCounter";
 import useGetData from "../../../hooks/use-GetData";
 import moment from "moment";
 import { useEffect, useState, useMemo, useCallback } from "react";

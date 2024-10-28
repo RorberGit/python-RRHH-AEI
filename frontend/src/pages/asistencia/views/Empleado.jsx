@@ -1,63 +1,46 @@
 import { Box, Typography } from "@mui/material";
-import { useReduxEmpleado } from "../../../redux/hooks/useReduxEmpleado";
+import { useReduxEmpleado } from "../../../redux/hooks/use-ReduxEmpleado";
 
 export default function Empleado() {
-  const {
-    foto,
-    nip,
-    ci,
-    nombre,
-    apellido_paterno,
-    apellido_materno,
-    areadpt,
-    cargo,
-    proyecto,
-    estado,
-  } = useReduxEmpleado().list;
+  //! Datos del empleado desde el store
+  const empleado = useReduxEmpleado().list;
+
+  console.log(" empleado", empleado);
+
+  //! Retornar un Typography formateado  con los datos del empleado
+  const renderTypography = (label, value) => (
+    <Typography gutterBottom>
+      <strong>{label}:</strong> <em>{value}</em>
+    </Typography>
+  );
 
   return (
     <Box sx={{ display: "flex" }}>
       <img
-        src={foto}
+        src={empleado.foto}
         alt="Foto"
         title="Foto"
-        style={{
-          width: "250px",
-          height: "300px",
-          marginRight: 20,
-          textAlign: "center",
-        }}
+        width={250}
+        height={300}
+        style={{ marginRight: 20 }}
       />
       <Box>
-        <Typography
-          gutterBottom
-          component="div"
-        >
-          <strong>NIP:</strong> <i>{nip}</i>
-        </Typography>
-        <Typography gutterBottom>
-          <strong>Número identidad:</strong> <em>{ci}</em>
-        </Typography>
-        <Typography gutterBottom>
-          <strong>Empleado:</strong> {nombre} {apellido_paterno}{" "}
-          {apellido_materno}
-        </Typography>
-        <Typography gutterBottom>
-          <strong>Área / Departameto:</strong> {areadpt?.nombre}
-        </Typography>
-        <Typography gutterBottom>
-          <strong>Cargo:</strong> {cargo?.nombre}
-        </Typography>
-        <Typography gutterBottom>
-          <strong>Proyecto:</strong> {proyecto?.nombre}
-        </Typography>
-        <Typography gutterBottom>
-          <strong>Jefe inmediato:</strong> {areadpt?.jefe?.nombre}{" "}
-          {areadpt?.jefe?.apellido_paterno} {areadpt?.jefe?.apellido_materno}
-        </Typography>
-        <Typography gutterBottom>
-          <strong>Estado:</strong> {estado}
-        </Typography>
+        {renderTypography("NIP", empleado.nip)}
+        {renderTypography("Número identidad", empleado.ci)}
+        {renderTypography(
+          "Empleado",
+          `${empleado.nombre} ${empleado.apellido_paterno} ${empleado.apellido_materno}`
+        )}
+        {renderTypography("Área / Departamento", empleado.areadpt?.nombre)}
+        {renderTypography("Cargo", empleado?.cargo?.nombre)}
+        {renderTypography("Proyecto", empleado?.proyecto?.nombre)}
+        {renderTypography(
+          "Jefe inmediato",
+          empleado?.areadpt?.jefe
+            ? `${empleado.areadpt.jefe.nombre} ${empleado.areadpt.jefe.apellido_paterno} ${empleado.areadpt.jefe.apellido_materno}`
+            : ""
+        )}
+        {renderTypography("Estado", empleado.estado)}
       </Box>
     </Box>
   );

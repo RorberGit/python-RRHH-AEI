@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import moment from "moment/min/moment-with-locales";
 import diasSemana from "./diasSemana";
 
-export default function EntradaSalida() {
+export default function Jornada() {
   const [jornada, setJornada] = useState(null);
 
   const diaActual = useMemo(() => diasSemana[moment().day()], []);
